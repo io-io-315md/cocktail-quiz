@@ -7,19 +7,53 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="quiz-container">
-    <h2 id="question-title">問題：</h2>
+  <div id="start-container" class="container show">
+    <h1>カクテルレシピ<br>クイズ</h1>
+    <p>現場のレシピを完璧に覚えよう</p>
+    
+    <div class="course-menu">
+      <button class="menu-btn" onclick="startQuiz('spirits')">スピリッツベース（入門編）</button>
+      <button class="menu-btn disabled" disabled>リキュールベース（準備中）</button>
+    </div>
+  </div>
+
+  <div id="quiz-container" class="container" style="display: none;">
+    <div id="timer-indicator" class="timer-indicator">
+      <div class="timer-indicator__label">
+        <span>残り</span>
+        <strong id="timer-display">20</strong>
+        <span>秒</span>
+      </div>
+      <div class="timer-indicator__track">
+        <div id="timer-bar" class="timer-indicator__bar"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+      <div>
+        <div id="progress-display" style="font-size: 14px; color: #666; font-weight: bold; margin-bottom: 5px;">第 1 問 / 全 10 問</div>
+        <h2 id="question-title" style="margin: 0; font-size: 20px;">問題：</h2>
+      </div>
+    </div>
     
     <div class="section">
-      <h3>1. ベース</h3>
+      <h3>ベース</h3>
       <div id="baseName-buttons"></div>
       <div id="baseAmount-container" class="amount-container">
         <div id="baseAmount-buttons"></div>
       </div>
     </div>
 
+    <div class="section" id="liqueur-section" style="display: none;">
+      <h3>材料</h3>
+      <div id="liqueurName-buttons"></div>
+      <div id="liqueurAmount-container" class="amount-container">
+        <div id="liqueurAmount-buttons"></div>
+      </div>
+    </div>
+
     <div class="section">
-      <h3>2. 割材</h3>
+      <h3>割材</h3>
       <div id="mixerName-buttons"></div>
       <div id="mixerAmount-container" class="amount-container">
         <div id="mixerAmount-buttons"></div>
@@ -27,7 +61,7 @@
     </div>
 
     <div class="section">
-      <h3>3. 副材料</h3>
+      <h3>副材料</h3>
       <div id="subName-buttons"></div>
       <div id="subAmount-container" class="amount-container">
         <div id="subAmount-buttons"></div>
@@ -35,20 +69,34 @@
     </div>
 
     <div class="section">
-      <h3>4. グラス</h3>
+      <h3>グラス</h3>
       <div id="glass-buttons"></div>
     </div>
 
     <div class="section">
-      <h3>5. 技法</h3>
+      <h3>技法</h3>
       <div id="technique-buttons"></div>
     </div>
 
+    <div id="result-area"></div>
     <button id="judge-btn" onclick="checkAnswer()">判定する</button>
-    <div id="result-area">
-      <p id="result-message"></p>
+  </div>
+
+  <div id="final-result-container" class="container" style="display: none; text-align: center;">
+    <h2 style="font-size: 28px; margin-top: 0;">テスト終了！</h2>
+    <div id="final-score" style="font-size: 22px; font-weight: bold; margin-bottom: 10px;"></div>
+    <div id="final-time" style="font-size: 16px; color: #555; margin-bottom: 25px;"></div>
+    
+    <h3 style="text-align: left; font-size: 16px; border-bottom: 2px solid #ddd; padding-bottom: 5px;">出題レシピのおさらい</h3>
+    <div id="recipe-list" style="text-align: left; max-height: 350px; overflow-y: auto; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #eee; font-size: 14px; line-height: 1.6;">
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+      <button class="menu-btn" onclick="startQuiz(selectedCourse)">同じコースをリスタート</button>
+      <button class="menu-btn" style="background-color: #6c757d;" onclick="returnToTitle()">タイトルへ戻る</button>
     </div>
   </div>
+  
   <script src="app.js"></script>
 </body>
 </html>
