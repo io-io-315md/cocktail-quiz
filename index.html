@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カクテルレシピクイズ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="quiz-container">
+    <h2 id="question-title">問題：</h2>
+    
+    <div class="section">
+      <h3>1. ベース</h3>
+      <div id="baseName-buttons"></div>
+      <div id="baseAmount-container" class="amount-container">
+        <div id="baseAmount-buttons"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>2. 割材</h3>
+      <div id="mixerName-buttons"></div>
+      <div id="mixerAmount-container" class="amount-container">
+        <div id="mixerAmount-buttons"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>3. 副材料</h3>
+      <div id="subName-buttons"></div>
+      <div id="subAmount-container" class="amount-container">
+        <div id="subAmount-buttons"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>4. グラス</h3>
+      <div id="glass-buttons"></div>
+    </div>
+
+    <div class="section">
+      <h3>5. 技法</h3>
+      <div id="technique-buttons"></div>
+    </div>
+
+    <button id="judge-btn" onclick="checkAnswer()">判定する</button>
+    <div id="result-area">
+      <p id="result-message"></p>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
