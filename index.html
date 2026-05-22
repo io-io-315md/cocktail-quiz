@@ -12,17 +12,63 @@
     <p>現場のレシピを完璧に覚えよう</p>
     
     <div class="course-menu">
-      <button class="menu-btn" onclick="startQuiz('spirits')">スピリッツベース（入門編）</button>
+      <button class="menu-btn" onclick="showModeSelect('spirits')">スピリッツベース（入門編）</button>
       <button class="menu-btn disabled" disabled>リキュールベース（準備中）</button>
+      <button class="menu-btn recipe-list-btn" onclick="showRecipeList()">レシピ一覧</button>
     </div>
   </div>
 
+  <div id="mode-select-container" class="container" style="display: none;">
+    <div class="mode-header">
+      <p class="screen-label">Select Mode</p>
+      <h2>モード選択</h2>
+      <p id="selected-course-label" class="mode-description">スピリッツベース</p>
+    </div>
+
+    <div class="mode-menu">
+      <button class="mode-card" onclick="startQuiz(selectedCourse, 'normal')">
+        <span class="mode-card__title">ノーマルモード</span>
+        <span class="mode-card__text">ひとつひとつ確認しながら10問解くモード</span>
+      </button>
+
+      <button class="mode-card" onclick="startQuiz(selectedCourse, 'timeAttack')">
+        <span class="mode-card__title">タイムアタックモード</span>
+        <span class="mode-card__text">10問を一気に解いて、最後に正答率と回答一覧を確認するモード</span>
+      </button>
+    </div>
+
+    <button class="menu-btn back-title-btn" onclick="returnToTitle()">タイトルへ戻る</button>
+  </div>
+
+  <div id="recipe-list-container" class="container" style="display: none;">
+    <div class="recipe-list-header">
+      <div>
+        <p class="screen-label">Recipe List</p>
+        <h2>レシピ一覧</h2>
+      </div>
+      <button class="back-btn" onclick="returnToTitle()">タイトルへ</button>
+    </div>
+
+    <input
+      type="search"
+      id="recipe-search-input"
+      class="recipe-search-input"
+      placeholder="カクテル名・材料・技法で検索"
+      oninput="renderRecipeList()"
+    >
+
+    <div id="recipe-count" class="recipe-count"></div>
+    <div id="recipe-list-view" class="recipe-list-view"></div>
+  </div>
+
   <div id="quiz-container" class="container" style="display: none;">
+    <button id="pause-btn" class="pause-btn" onclick="pauseQuiz()">一時停止</button>
+
     <div id="timer-indicator" class="timer-indicator">
       <div class="timer-indicator__label">
-        <span>残り</span>
+        <span id="timer-label-prefix">残り</span>
         <strong id="timer-display">20</strong>
-        <span>秒</span>
+        <span id="timer-label-suffix">秒</span>
       </div>
       <div class="timer-indicator__track">
         <div id="timer-bar" class="timer-indicator__bar"></div>
@@ -82,17 +128,26 @@
     <button id="judge-btn" onclick="checkAnswer()">判定する</button>
   </div>
 
+  <div id="pause-modal" class="pause-modal" style="display: none;">
+    <div class="pause-modal__content">
+      <h2>一時停止中</h2>
+      <p>再開するか、タイトルへ戻るか選んでください。</p>
+      <button class="menu-btn" onclick="resumeQuiz()">再開する</button>
+      <button class="menu-btn back-title-btn" onclick="returnToTitle()">タイトルへ戻る</button>
+    </div>
+  </div>
+
   <div id="final-result-container" class="container" style="display: none; text-align: center;">
-    <h2 style="font-size: 28px; margin-top: 0;">テスト終了！</h2>
+    <h2 id="final-title" style="font-size: 28px; margin-top: 0;">テスト終了！</h2>
     <div id="final-score" style="font-size: 22px; font-weight: bold; margin-bottom: 10px;"></div>
     <div id="final-time" style="font-size: 16px; color: #555; margin-bottom: 25px;"></div>
     
-    <h3 style="text-align: left; font-size: 16px; border-bottom: 2px solid #ddd; padding-bottom: 5px;">出題レシピのおさらい</h3>
+    <h3 id="final-list-title" style="text-align: left; font-size: 16px; border-bottom: 2px solid #ddd; padding-bottom: 5px;">出題レシピのおさらい</h3>
     <div id="recipe-list" style="text-align: left; max-height: 350px; overflow-y: auto; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #eee; font-size: 14px; line-height: 1.6;">
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
-      <button class="menu-btn" onclick="startQuiz(selectedCourse)">同じコースをリスタート</button>
+      <button class="menu-btn" onclick="showModeSelect(selectedCourse)">同じコースをもう一度</button>
       <button class="menu-btn" style="background-color: #6c757d;" onclick="returnToTitle()">タイトルへ戻る</button>
     </div>
   </div>
