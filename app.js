@@ -93,6 +93,7 @@ function shuffleArray(array) {
 window.onload = async function() {
   await loadCocktailData();
 };
+
 // --- 画面制御 ---
 
 function hideAllScreens() {
@@ -103,6 +104,18 @@ function hideAllScreens() {
   document.getElementById("final-result-container").style.display = "none";
 
   closePauseModal();
+}
+
+function getCourseLabel(courseName) {
+  if (courseName === "spirits") {
+    return "スピリッツベース（入門編）";
+  }
+
+  if (courseName === "liqueur") {
+    return "リキュールベース（入門編）";
+  }
+
+  return courseName;
 }
 
 function showModeSelect(courseName) {
@@ -119,7 +132,7 @@ function showModeSelect(courseName) {
 
   const label = document.getElementById("selected-course-label");
   if (label) {
-    label.textContent = courseName === "spirits" ? "スピリッツベース（入門編）" : courseName;
+    label.textContent = getCourseLabel(courseName);
   }
 
   document.getElementById("mode-select-container").style.display = "block";
@@ -318,6 +331,7 @@ function startQuiz(courseName, mode = "normal") {
   setupTimerForMode();
   setRandomQuestion();
 }
+
 function setupTimerForMode() {
   const timerIndicator = document.getElementById("timer-indicator");
   const timerLabelPrefix = document.getElementById("timer-label-prefix");
@@ -366,6 +380,23 @@ function setupTimerForMode() {
       timerBar.style.width = "100%";
     }
   }
+}
+
+function scrollToQuizTop() {
+  setTimeout(() => {
+    const quizContainer = document.getElementById("quiz-container");
+
+    if (quizContainer && quizContainer.style.display !== "none") {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto"
+      });
+
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+  }, 0);
 }
 
 function setRandomQuestion() {
@@ -452,6 +483,8 @@ function setRandomQuestion() {
   } else {
     startTimeAttackTimer();
   }
+
+  scrollToQuizTop();
 }
 
 // --- タイマー処理 ---
@@ -547,11 +580,15 @@ function stopTimer(saveTimeAttackElapsed = true) {
 function handleTimeUp() {
   isFirstAttempt = false;
 
+  const isLastQuestion = currentQuestionNumber >= QUESTION_LIMIT;
+  const buttonText = isLastQuestion ? "結果へ" : "次の問題へ";
+  const buttonAction = isLastQuestion ? "showFinalResult()" : "setRandomQuestion()";
+
   showResultModal(
     "wrong",
     "⏳ タイムアップ！",
     `<div style="color: #dc3545; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center;">時間切れです。正解はこちら。</div>${getRecipeSummaryHtml(currentCocktail)}`,
-    `<button style="padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #007bff; color: white; font-weight: bold; transition: 0.2s;" onclick="setRandomQuestion()">次の問題へ</button>`
+    `<button style="padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #007bff; color: white; font-weight: bold; transition: 0.2s;" onclick="${buttonAction}">${buttonText}</button>`
   );
 }
 
@@ -646,6 +683,8 @@ function cloneSelectedAnswers() {
 // --- リザルト処理 ---
 
 function showFinalResult() {
+  closeResultModal();
+
   const finalElapsedMilliseconds = currentMode === "timeAttack"
     ? getTimeAttackElapsedMilliseconds()
     : Date.now() - totalStartTime;
@@ -685,6 +724,12 @@ function showFinalResult() {
   } else {
     document.getElementById("recipe-list").innerHTML = buildNormalResultHtml();
   }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto"
+  });
 }
 
 function formatTime(totalTimeSec) {
@@ -811,6 +856,7 @@ function retryQuestion() {
 
   timeRemaining = TIME_LIMIT;
   startTimer();
+  scrollToQuizTop();
 }
 
 function closeResultModal() {
@@ -969,9 +1015,13 @@ function handleNormalAnswer() {
   const primaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #007bff; color: white; font-weight: bold; transition: 0.2s;";
   const secondaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #6c757d; color: white; font-weight: bold; transition: 0.2s;";
 
+  const isLastQuestion = currentQuestionNumber >= QUESTION_LIMIT;
+  const nextButtonText = isLastQuestion ? "結果へ" : "次の問題へ";
+  const nextButtonAction = isLastQuestion ? "showFinalResult()" : "setRandomQuestion()";
+
   const actionsHtml = `
     <button style="${secondaryBtnStyle}" onclick="retryQuestion()">もう一度</button>
-    <button style="${primaryBtnStyle}" onclick="setRandomQuestion()">次の問題へ</button>
+    <button style="${primaryBtnStyle}" onclick="${nextButtonAction}">${nextButtonText}</button>
   `;
 
   quizHistory.push({
@@ -1019,78 +1069,3 @@ function handleTimeAttackAnswer() {
 
   setRandomQuestion();
 }
-// --- 問題切り替え時にページ上部へ戻す処理 ---
-const originalSetRandomQuestion = setRandomQuestion;
-
-setRandomQuestion = function() {
-  originalSetRandomQuestion();
-
-  setTimeout(() => {
-    const quizContainer = document.getElementById("quiz-container");
-
-    if (quizContainer && quizContainer.style.display !== "none") {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "auto"
-      });
-
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
-  }, 0);
-};
-// --- ノーマルモード10問目終了時のボタン表示修正 ---
-const originalShowFinalResultForLastQuestion = showFinalResult;
-
-showFinalResult = function() {
-  closeResultModal();
-  originalShowFinalResultForLastQuestion();
-};
-
-handleNormalAnswer = function() {
-  stopTimer();
-
-  const isCorrect = judgeCurrentAnswer(selectedAnswers);
-
-  const primaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #007bff; color: white; font-weight: bold; transition: 0.2s;";
-  const secondaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #6c757d; color: white; font-weight: bold; transition: 0.2s;";
-
-  const isLastQuestion = currentQuestionNumber >= QUESTION_LIMIT;
-
-  const nextButtonText = isLastQuestion ? "結果へ" : "次の問題へ";
-  const nextButtonAction = isLastQuestion ? "showFinalResult()" : "setRandomQuestion()";
-
-  const actionsHtml = `
-    <button style="${secondaryBtnStyle}" onclick="retryQuestion()">もう一度</button>
-    <button style="${primaryBtnStyle}" onclick="${nextButtonAction}">${nextButtonText}</button>
-  `;
-
-  quizHistory.push({
-    cocktail: currentCocktail,
-    userAnswer: cloneSelectedAnswers(),
-    isCorrect
-  });
-
-  if (isCorrect) {
-    if (isFirstAttempt) {
-      correctCount++;
-    }
-
-    showResultModal(
-      "correct",
-      "⭕ 正解！",
-      `<div style="color: #28a745; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center;">完璧です！</div>${getRecipeSummaryHtml(currentCocktail)}`,
-      actionsHtml
-    );
-  } else {
-    isFirstAttempt = false;
-
-    showResultModal(
-      "wrong",
-      "❌ 不正解...",
-      `<div style="color: #dc3545; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center;">惜しい！正解はこちらです。</div>${getRecipeSummaryHtml(currentCocktail)}`,
-      actionsHtml
-    );
-  }
-};

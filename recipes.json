@@ -255,5 +255,182 @@
       "subName": ["なし", "グレナデンシロップ", "ライムカット"],
       "subAmount": ["1tsp", "10ml", "15ml", "20ml"]
     }
+  },
+  {
+    "name": "カシスオレンジ",
+    "course": "liqueur",
+    "baseName": "カシスリキュール",
+    "baseAmount": "30ml",
+    "mixerName": "オレンジジュース",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カシスリキュール", "ピーチリキュール", "カンパリ", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "グレープフルーツジュース", "ソーダ", "ウーロン茶"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "カシスソーダ",
+    "course": "liqueur",
+    "baseName": "カシスリキュール",
+    "baseAmount": "30ml",
+    "mixerName": "ソーダ",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カシスリキュール", "ピーチリキュール", "カンパリ", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ソーダ", "トニックウォーター", "ジンジャーエール", "オレンジジュース"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "カシスウーロン",
+    "course": "liqueur",
+    "baseName": "カシスリキュール",
+    "baseAmount": "30ml",
+    "mixerName": "ウーロン茶",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カシスリキュール", "ピーチリキュール", "カンパリ", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ウーロン茶", "オレンジジュース", "ソーダ", "グレープフルーツジュース"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "ファジーネーブル",
+    "course": "liqueur",
+    "baseName": "ピーチリキュール",
+    "baseAmount": "30ml",
+    "mixerName": "オレンジジュース",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ピーチリキュール", "カシスリキュール", "カンパリ", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "グレープフルーツジュース", "ソーダ", "ウーロン茶"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "ピーチウーロン",
+    "course": "liqueur",
+    "baseName": "ピーチリキュール",
+    "baseAmount": "30ml",
+    "mixerName": "ウーロン茶",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ピーチリキュール", "カシスリキュール", "カンパリ", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ウーロン茶", "オレンジジュース", "ソーダ", "グレープフルーツジュース"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "カンパリオレンジ",
+    "course": "liqueur",
+    "baseName": "カンパリ",
+    "baseAmount": "30ml",
+    "mixerName": "オレンジジュース",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カンパリ", "カシスリキュール", "ピーチリキュール", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "ソーダ", "グレープフルーツジュース", "トニックウォーター"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "カンパリソーダ",
+    "course": "liqueur",
+    "baseName": "カンパリ",
+    "baseAmount": "30ml",
+    "mixerName": "ソーダ",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カンパリ", "カシスリキュール", "ピーチリキュール", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ソーダ", "トニックウォーター", "ジンジャーエール", "オレンジジュース"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "スプモーニ",
+    "course": "liqueur",
+    "baseName": "カンパリ",
+    "baseAmount": "30ml",
+    "mixerName": "グレープフルーツジュース",
+    "mixerAmount": "45ml",
+    "subName": "トニックウォーター",
+    "subAmount": "UP",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カンパリ", "カシスリキュール", "ピーチリキュール", "カルーア"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["グレープフルーツジュース", "オレンジジュース", "ソーダ", "トニックウォーター"],
+      "mixerAmount": ["30ml", "45ml", "UP"],
+      "subName": ["なし", "トニックウォーター", "ソーダ", "ジンジャーエール"],
+      "subAmount": ["30ml", "45ml", "UP"]
+    }
+  },
+  {
+    "name": "カルーアミルク",
+    "course": "liqueur",
+    "baseName": "カルーア",
+    "baseAmount": "30ml",
+    "mixerName": "牛乳",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "ロックグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["カルーア", "カシスリキュール", "ピーチリキュール", "カンパリ"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["牛乳", "ウーロン茶", "オレンジジュース", "ソーダ"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "チャイナブルー",
+    "course": "liqueur",
+    "baseName": "ライチリキュール",
+    "baseAmount": "30ml",
+    "liqueurName": "ブルーキュラソー",
+    "liqueurAmount": "10ml",
+    "mixerName": "グレープフルーツジュース",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ライチリキュール", "カシスリキュール", "ピーチリキュール", "カンパリ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["ブルーキュラソー", "コアントロー", "カンパリ", "なし"],
+      "liqueurAmount": ["1tsp", "10ml", "15ml"],
+      "mixerName": ["グレープフルーツジュース", "オレンジジュース", "ソーダ", "トニックウォーター"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
   }
 ]
