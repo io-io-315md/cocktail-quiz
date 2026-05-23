@@ -1204,3 +1204,223 @@ startQuiz = function(courseName, difficulty = "beginner", mode = "normal") {
   setupTimerForMode();
   setRandomQuestion();
 };
+// --- ver1.7: ノーマル制限時間30秒化・ゲージ色変更・タイムアタックスコア追加 ---
+
+const NORMAL_MODE_TIME_LIMIT = 30;
+
+function getTimeAttackRank(totalTimeSec) {
+  if (totalTimeSec < 60) {
+    return "SS";
+  }
+
+  if (totalTimeSec <= 75) {
+    return "S";
+  }
+
+  if (totalTimeSec <= 90) {
+    return "A";
+  }
+
+  if (totalTimeSec <= 110) {
+    return "B";
+  }
+
+  return "C";
+}
+
+function getTimeAttackRankClass(rank) {
+  if (rank === "SS") return "rank-ss";
+  if (rank === "S") return "rank-s";
+  if (rank === "A") return "rank-a";
+  if (rank === "B") return "rank-b";
+  return "rank-c";
+}
+
+startTimer = function() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+
+  timeRemaining = NORMAL_MODE_TIME_LIMIT;
+
+  updateTimerUI();
+
+  timerInterval = setInterval(() => {
+    timeRemaining--;
+
+    updateTimerUI();
+
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      handleTimeUp();
+    }
+  }, 1000);
+};
+
+updateTimerUI = function() {
+  const timerEl = document.getElementById("timer-display");
+  const timerBar = document.getElementById("timer-bar");
+  const timerIndicator = document.getElementById("timer-indicator");
+  const safeRemaining = Math.max(timeRemaining, 0);
+  const remainingRate = (safeRemaining / NORMAL_MODE_TIME_LIMIT) * 100;
+
+  if (timerEl) {
+    timerEl.textContent = safeRemaining;
+  }
+
+  if (timerBar) {
+    timerBar.style.width = `${remainingRate}%`;
+  }
+
+  if (timerIndicator) {
+    timerIndicator.classList.remove("elapsed");
+    timerIndicator.classList.toggle("warning", safeRemaining <= 15 && safeRemaining > 5);
+    timerIndicator.classList.toggle("danger", safeRemaining <= 5);
+  }
+};
+
+setupTimerForMode = function() {
+  const timerIndicator = document.getElementById("timer-indicator");
+  const timerLabelPrefix = document.getElementById("timer-label-prefix");
+  const timerLabelSuffix = document.getElementById("timer-label-suffix");
+  const timerBar = document.getElementById("timer-bar");
+  const timerTrack = document.querySelector(".timer-indicator__track");
+  const timerDisplay = document.getElementById("timer-display");
+
+  if (timerIndicator) {
+    timerIndicator.classList.remove("warning", "danger", "elapsed");
+    timerIndicator.style.display = "block";
+  }
+
+  if (currentMode === "timeAttack") {
+    if (timerLabelPrefix) timerLabelPrefix.textContent = "経過";
+    if (timerLabelSuffix) timerLabelSuffix.textContent = "秒";
+    if (timerDisplay) timerDisplay.textContent = "0.0";
+
+    if (timerTrack) {
+      timerTrack.style.display = "none";
+    }
+
+    if (timerIndicator) {
+      timerIndicator.style.width = "auto";
+      timerIndicator.style.minWidth = "120px";
+    }
+
+    if (timerBar) {
+      timerBar.style.width = "100%";
+    }
+  } else {
+    if (timerLabelPrefix) timerLabelPrefix.textContent = "残り";
+    if (timerLabelSuffix) timerLabelSuffix.textContent = "秒";
+    if (timerDisplay) timerDisplay.textContent = NORMAL_MODE_TIME_LIMIT;
+
+    if (timerTrack) {
+      timerTrack.style.display = "block";
+    }
+
+    if (timerIndicator) {
+      timerIndicator.style.width = "";
+      timerIndicator.style.minWidth = "";
+    }
+
+    if (timerBar) {
+      timerBar.style.width = "100%";
+    }
+  }
+};
+
+retryQuestion = function() {
+  closeResultModal();
+
+  selectedAnswers = {};
+  categories.forEach(cat => selectedAnswers[cat] = "");
+
+  document.querySelectorAll(".choice-btn").forEach(btn => btn.classList.remove("selected"));
+  document.querySelectorAll(".amount-container").forEach(el => el.style.display = "none");
+
+  timeRemaining = NORMAL_MODE_TIME_LIMIT;
+  startTimer();
+  scrollToQuizTop();
+};
+
+resetTimeAttackTimerState = function() {
+  elapsedMilliseconds = 0;
+  activeStartTime = 0;
+
+  const timerDisplay = document.getElementById("timer-display");
+  if (timerDisplay) {
+    timerDisplay.textContent = currentMode === "timeAttack" ? "0.0" : NORMAL_MODE_TIME_LIMIT;
+  }
+};
+
+showFinalResult = function() {
+  closeResultModal();
+
+  const finalElapsedMilliseconds = currentMode === "timeAttack"
+    ? getTimeAttackElapsedMilliseconds()
+    : Date.now() - totalStartTime;
+
+  stopTimer(true);
+
+  hideAllScreens();
+
+  const finalContainer = document.getElementById("final-result-container");
+  finalContainer.style.display = "block";
+
+  const totalTimeSec = currentMode === "timeAttack"
+    ? finalElapsedMilliseconds / 1000
+    : Math.floor(finalElapsedMilliseconds / 1000);
+
+  const timeStr = formatTime(totalTimeSec);
+
+  const accuracy = Math.round((correctCount / QUESTION_LIMIT) * 100);
+  const accuracyColor = accuracy >= 80 ? "#28a745" : "#d9534f";
+
+  const finalTitle = document.getElementById("final-title");
+  const finalListTitle = document.getElementById("final-list-title");
+  const finalScore = document.getElementById("final-score");
+  const finalTime = document.getElementById("final-time");
+
+  if (currentMode === "timeAttack") {
+    const rank = getTimeAttackRank(totalTimeSec);
+    const rankClass = getTimeAttackRankClass(rank);
+
+    if (finalTitle) finalTitle.textContent = "タイムアタック終了！";
+    if (finalListTitle) finalListTitle.textContent = "回答結果一覧";
+
+    finalScore.innerHTML = `
+      正答数：${correctCount} / ${QUESTION_LIMIT} 問
+      <span style="color: ${accuracyColor};">（正答率 ${accuracy}％）</span>
+    `;
+
+    finalTime.innerHTML = `
+      <div>所要時間：${timeStr}</div>
+      <div class="time-attack-rank ${rankClass}">
+        SCORE ${rank}
+      </div>
+      <div class="time-attack-rank-note">
+        SS：60秒未満 / S：75秒以内 / A：90秒以内 / B：110秒以内 / C：それ以降
+      </div>
+    `;
+
+    document.getElementById("recipe-list").innerHTML = buildTimeAttackResultHtml();
+  } else {
+    if (finalTitle) finalTitle.textContent = "テスト終了！";
+    if (finalListTitle) finalListTitle.textContent = "出題レシピのおさらい";
+
+    finalScore.innerHTML = `
+      正答数：${correctCount} / ${QUESTION_LIMIT} 問
+      <span style="color: ${accuracyColor};">（正答率 ${accuracy}％）</span>
+    `;
+
+    finalTime.textContent = `所要時間：${timeStr}`;
+
+    document.getElementById("recipe-list").innerHTML = buildNormalResultHtml();
+  }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto"
+  });
+};

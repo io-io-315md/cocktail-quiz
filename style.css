@@ -535,3 +535,42 @@ body.quiz-paused .pause-modal {
     border-color: #ddd;
     transform: none;
 }
+.time-attack-rank {
+    margin: 16px auto 8px;
+    padding: 14px 18px;
+    width: fit-content;
+    min-width: 120px;
+    border-radius: 999px;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: white;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.rank-ss {
+    background: linear-gradient(135deg, #7f00ff, #e100ff);
+}
+
+.rank-s {
+    background: linear-gradient(135deg, #ff9800, #ffc107);
+}
+
+.rank-a {
+    background: linear-gradient(135deg, #007bff, #00bcd4);
+}
+
+.rank-b {
+    background: linear-gradient(135deg, #28a745, #8bc34a);
+}
+
+.rank-c {
+    background: linear-gradient(135deg, #6c757d, #343a40);
+}
+
+.time-attack-rank-note {
+    margin-top: 6px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.6;
+}
