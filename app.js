@@ -1424,3 +1424,130 @@ showFinalResult = function() {
     behavior: "auto"
   });
 };
+// --- ver1.8: タイムアタックスコアに正答率補正を追加 ---
+
+function getBaseTimeAttackRank(totalTimeSec) {
+  if (totalTimeSec < 60) {
+    return "SS";
+  }
+
+  if (totalTimeSec <= 75) {
+    return "S";
+  }
+
+  if (totalTimeSec <= 90) {
+    return "A";
+  }
+
+  if (totalTimeSec <= 110) {
+    return "B";
+  }
+
+  return "C";
+}
+
+function applyAccuracyPenaltyToRank(baseRank, accuracy) {
+  const ranks = ["SS", "S", "A", "B", "C"];
+  const baseIndex = ranks.indexOf(baseRank);
+
+  if (baseIndex === -1) {
+    return "C";
+  }
+
+  let penalty = 0;
+
+  if (accuracy >= 90) {
+    penalty = 0;
+  } else if (accuracy >= 80) {
+    penalty = 1;
+  } else if (accuracy >= 60) {
+    penalty = 2;
+  } else {
+    return "C";
+  }
+
+  const finalIndex = Math.min(baseIndex + penalty, ranks.length - 1);
+
+  return ranks[finalIndex];
+}
+
+getTimeAttackRank = function(totalTimeSec, accuracy = 100) {
+  const baseRank = getBaseTimeAttackRank(totalTimeSec);
+
+  return applyAccuracyPenaltyToRank(baseRank, accuracy);
+};
+
+showFinalResult = function() {
+  closeResultModal();
+
+  const finalElapsedMilliseconds = currentMode === "timeAttack"
+    ? getTimeAttackElapsedMilliseconds()
+    : Date.now() - totalStartTime;
+
+  stopTimer(true);
+
+  hideAllScreens();
+
+  const finalContainer = document.getElementById("final-result-container");
+  finalContainer.style.display = "block";
+
+  const totalTimeSec = currentMode === "timeAttack"
+    ? finalElapsedMilliseconds / 1000
+    : Math.floor(finalElapsedMilliseconds / 1000);
+
+  const timeStr = formatTime(totalTimeSec);
+
+  const accuracy = Math.round((correctCount / QUESTION_LIMIT) * 100);
+  const accuracyColor = accuracy >= 80 ? "#28a745" : "#d9534f";
+
+  const finalTitle = document.getElementById("final-title");
+  const finalListTitle = document.getElementById("final-list-title");
+  const finalScore = document.getElementById("final-score");
+  const finalTime = document.getElementById("final-time");
+
+  if (currentMode === "timeAttack") {
+    const baseRank = getBaseTimeAttackRank(totalTimeSec);
+    const rank = getTimeAttackRank(totalTimeSec, accuracy);
+    const rankClass = getTimeAttackRankClass(rank);
+
+    if (finalTitle) finalTitle.textContent = "タイムアタック終了！";
+    if (finalListTitle) finalListTitle.textContent = "回答結果一覧";
+
+    finalScore.innerHTML = `
+      正答数：${correctCount} / ${QUESTION_LIMIT} 問
+      <span style="color: ${accuracyColor};">（正答率 ${accuracy}％）</span>
+    `;
+
+    finalTime.innerHTML = `
+      <div>所要時間：${timeStr}</div>
+      <div class="time-attack-rank ${rankClass}">
+        SCORE ${rank}
+      </div>
+      <div class="time-attack-rank-note">
+        タイム基準：${baseRank} / 正答率補正後：${rank}<br>
+        SS：60秒未満 / S：75秒以内 / A：90秒以内 / B：110秒以内 / C：それ以降<br>
+        正答率90％以上：変動なし / 80％以上：1段階ダウン / 60％以上：2段階ダウン / 60％未満：C固定
+      </div>
+    `;
+
+    document.getElementById("recipe-list").innerHTML = buildTimeAttackResultHtml();
+  } else {
+    if (finalTitle) finalTitle.textContent = "テスト終了！";
+    if (finalListTitle) finalListTitle.textContent = "出題レシピのおさらい";
+
+    finalScore.innerHTML = `
+      正答数：${correctCount} / ${QUESTION_LIMIT} 問
+      <span style="color: ${accuracyColor};">（正答率 ${accuracy}％）</span>
+    `;
+
+    finalTime.textContent = `所要時間：${timeStr}`;
+
+    document.getElementById("recipe-list").innerHTML = buildNormalResultHtml();
+  }
+
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "auto"
+  });
+};
