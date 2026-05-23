@@ -1,0 +1,259 @@
+[
+  {
+    "name": "ジントニック",
+    "course": "spirits",
+    "baseName": "ジン",
+    "baseAmount": "45ml",
+    "subName": "ライムカット",
+    "mixerName": "トニックウォーター",
+    "mixerAmount": "UP",
+    "glass": "ゾンビグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ジン"],
+      "baseAmount": ["30ml", "45ml"],
+      "subName": ["なし", "ライムカット", "レモンカット"],
+      "mixerName": ["トニックウォーター", "ソーダ", "ジンジャーエール"]
+    }
+  },
+  {
+    "name": "ホワイトレディ",
+    "course": "spirits",
+    "baseName": "ジン",
+    "baseAmount": "30ml",
+    "liqueurName": "コアントロー",
+    "liqueurAmount": "15ml",
+    "mixerName": "レモンジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["コアントロー", "アマレット", "ピーチリキュール"],
+      "subName": ["なし", "ドライベルモット", "オリーブ"],
+      "mixerName": ["ジンジャーエール", "レモンジュース", "ライムジュース", "トニックウォーター"]
+    }
+  },
+  {
+    "name": "マティーニ",
+    "course": "spirits",
+    "baseName": "ジン",
+    "baseAmount": "45ml",
+    "subName": "オリーブ",
+    "mixerName": "ドライベルモット",
+    "mixerAmount": "15ml",
+    "glass": "カクテルグラス",
+    "technique": "ステア",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml", "60ml"],
+      "subName": ["なし", "レモンカット", "ライムカット", "オリーブ"],
+      "mixerName": ["オレンジジュース", "ドライベルモット", "ソーダ"]
+    }
+  },
+  {
+    "name": "ソルティドッグ",
+    "course": "spirits",
+    "baseName": "ウォッカ",
+    "baseAmount": "45ml",
+    "mixerName": "グレープフルーツジュース",
+    "mixerAmount": "UP",
+    "subName": "スノースタイル",
+    "glass": "専用グラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
+      "subName": ["なし", "レモンカット", "ライムカット", "スノースタイル"]
+    }
+  },
+  {
+    "name": "ギムレット",
+    "course": "spirits",
+    "baseName": "ジン",
+    "baseAmount": "45ml",
+    "mixerName": "ライムジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ライムジュース", "グレープフルーツジュース", "トニックウォーター"],
+      "subName": ["なし", "レモンカット", "ライムカット", "スノースタイル"]
+    }
+  },
+  {
+    "name": "ジンライム",
+    "course": "spirits",
+    "baseName": "ジン",
+    "baseAmount": "45ml",
+    "mixerName": "ライムジュース",
+    "mixerAmount": "15ml",
+    "subName": "ライムカット",
+    "glass": "ロックグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ジン"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ライムジュース", "トニックウォーター"],
+      "subName": ["なし", "レモンカット", "ライムカット", "スノースタイル"]
+    }
+  },
+  {
+    "name": "モスコミュール",
+    "course": "spirits",
+    "baseName": "ウォッカ",
+    "baseAmount": "45ml",
+    "mixerName": "ジンジャーエール",
+    "mixerAmount": "UP",
+    "subName": "ライムカット",
+    "glass": "ゾンビグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ライムジュース", "グレープフルーツジュース", "トニックウォーター", "ジンジャーエール"],
+      "subName": ["なし", "レモンカット", "ライムカット", "スノースタイル"]
+    }
+  },
+  {
+    "name": "スクリュードライバー",
+    "course": "spirits",
+    "baseName": "ウォッカ",
+    "baseAmount": "45ml",
+    "mixerName": "オレンジジュース",
+    "mixerAmount": "UP",
+    "subName": "なし",
+    "glass": "コリンズグラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
+      "subName": ["なし", "ライムカット", "レモンカット"]
+    }
+  },
+  {
+    "name": "バラライカ",
+    "course": "spirits",
+    "baseName": "ウォッカ",
+    "baseAmount": "30ml",
+    "liqueurName": "コアントロー",
+    "liqueurAmount": "15ml",
+    "mixerName": "レモンジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["コアントロー", "アマレット", "ドライベルモット"],
+      "mixerName": ["レモンジュース", "ライムジュース", "グレープフルーツジュース"],
+      "subName": ["なし", "レモンカット", "ライムカット"]
+    }
+  },
+  {
+    "name": "カミカゼ",
+    "course": "spirits",
+    "baseName": "ウォッカ",
+    "baseAmount": "45ml",
+    "liqueurName": "コアントロー",
+    "liqueurAmount": "1tsp",
+    "mixerName": "ライムジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "ロックグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["コアントロー", "ドライベルモット", "アマレット", "なし"],
+      "mixerName": ["ライムジュース", "レモンジュース", "トニックウォーター"],
+      "subName": ["なし", "ライムカット"]
+    }
+  },
+  {
+    "name": "バカルディ",
+    "course": "spirits",
+    "baseName": "ラム",
+    "baseAmount": "45ml",
+    "mixerName": "ライムジュース",
+    "mixerAmount": "15ml",
+    "subName": "グレナデンシロップ",
+    "subAmount": "1tsp",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["ライムジュース", "レモンジュース", "オレンジジュース"],
+      "subName": ["なし", "グレナデンシロップ", "ライムカット"],
+      "subAmount": ["1tsp", "10ml", "15ml"]
+    }
+  },
+  {
+    "name": "XYZ",
+    "course": "spirits",
+    "baseName": "ラム",
+    "baseAmount": "30ml",
+    "liqueurName": "コアントロー",
+    "liqueurAmount": "15ml",
+    "mixerName": "レモンジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["コアントロー", "アマレット", "ブルーキュラソー"],
+      "mixerName": ["レモンジュース", "ライムジュース", "グレープフルーツジュース"],
+      "subName": ["なし", "レモンカット", "ライムカット"]
+    }
+  },
+  {
+    "name": "マルガリータ",
+    "course": "spirits",
+    "baseName": "テキーラ",
+    "baseAmount": "30ml",
+    "liqueurName": "コアントロー",
+    "liqueurAmount": "15ml",
+    "mixerName": "レモンジュース",
+    "mixerAmount": "15ml",
+    "subName": "なし",
+    "glass": "カクテルグラス",
+    "technique": "シェイク",
+    "choices": {
+      "baseName": ["テキーラ", "ジン", "ラム", "ウォッカ"],
+      "baseAmount": ["30ml", "45ml"],
+      "liqueurName": ["コアントロー", "ドライベルモット", "ピーチリキュール"],
+      "mixerName": ["レモンジュース", "ライムジュース", "オレンジジュース"],
+      "subName": ["なし", "スノースタイル", "ライムカット"]
+    }
+  },
+  {
+    "name": "テキーラサンライズ",
+    "course": "spirits",
+    "baseName": "テキーラ",
+    "baseAmount": "45ml",
+    "mixerName": "オレンジジュース",
+    "mixerAmount": "UP",
+    "subName": "グレナデンシロップ",
+    "subAmount": "20ml",
+    "glass": "専用グラス",
+    "technique": "ビルド",
+    "choices": {
+      "baseName": ["テキーラ", "ウォッカ", "ラム", "ジン"],
+      "baseAmount": ["30ml", "45ml"],
+      "mixerName": ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
+      "subName": ["なし", "グレナデンシロップ", "ライムカット"],
+      "subAmount": ["1tsp", "10ml", "15ml", "20ml"]
+    }
+  }
+]

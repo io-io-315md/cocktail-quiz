@@ -5,266 +5,36 @@ const masterChoices = {
   mixerAmount: ["1tsp", "10ml", "15ml", "20ml", "30ml", "45ml", "UP"]
 };
 
-// --- カクテルデータ（ファジーネーブル削除済み） ---
-const cocktailData = [
-  {
-    name: "ジントニック",
-    course: "spirits",
-    baseName: "ジン",
-    baseAmount: "45ml",
-    subName: "ライムカット",
-    mixerName: "トニックウォーター",
-    mixerAmount: "UP",
-    glass: "ゾンビグラス",
-    technique: "ビルド",
-    choices: {
-      baseName: ["ジン"],
-      baseAmount: ["30ml", "45ml"],
-      subName: ["なし", "ライムカット", "レモンカット"],
-      mixerName: ["トニックウォーター", "ソーダ", "ジンジャーエール"]
+// --- カクテルデータ ---
+let cocktailData = [];
+
+// --- レシピデータ読み込み ---
+async function loadCocktailData() {
+  try {
+    const response = await fetch("recipes.json");
+
+    if (!response.ok) {
+      throw new Error(`recipes.json の読み込みに失敗しました: ${response.status}`);
     }
-  },
-  {
-    name: "ホワイトレディ",
-    course: "spirits",
-    baseName: "ジン",
-    baseAmount: "30ml",
-    liqueurName: "コアントロー",
-    liqueurAmount: "15ml",
-    mixerName: "レモンジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      liqueurName: ["コアントロー", "アマレット", "ピーチリキュール"],
-      subName: ["なし", "ドライベルモット", "オリーブ"],
-      mixerName: ["ジンジャーエール", "レモンジュース", "ライムジュース", "トニックウォーター"]
+
+    cocktailData = await response.json();
+
+    if (!Array.isArray(cocktailData) || cocktailData.length === 0) {
+      throw new Error("recipes.json の中身が空、または配列ではありません。");
     }
-  },
-  {
-    name: "マティーニ",
-    course: "spirits",
-    baseName: "ジン",
-    baseAmount: "45ml",
-    subName: "オリーブ",
-    mixerName: "ドライベルモット",
-    mixerAmount: "15ml",
-    glass: "カクテルグラス",
-    technique: "ステア",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml", "60ml"],
-      subName: ["なし", "レモンカット", "ライムカット", "オリーブ"],
-      mixerName: ["オレンジジュース", "ドライベルモット", "ソーダ"]
-    }
-  },
-  {
-    name: "ソルティドッグ",
-    course: "spirits",
-    baseName: "ウォッカ",
-    baseAmount: "45ml",
-    mixerName: "グレープフルーツジュース",
-    mixerAmount: "UP",
-    subName: "スノースタイル",
-    glass: "専用グラス",
-    technique: "ビルド",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
-      subName: ["なし", "レモンカット", "ライムカット", "スノースタイル"]
-    }
-  },
-  {
-    name: "ギムレット",
-    course: "spirits",
-    baseName: "ジン",
-    baseAmount: "45ml",
-    mixerName: "ライムジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["ライムジュース", "グレープフルーツジュース", "トニックウォーター"],
-      subName: ["なし", "レモンカット", "ライムカット", "スノースタイル"]
-    }
-  },
-  {
-    name: "ジンライム",
-    course: "spirits",
-    baseName: "ジン",
-    baseAmount: "45ml",
-    mixerName: "ライムジュース",
-    mixerAmount: "15ml",
-    subName: "ライムカット",
-    glass: "ロックグラス",
-    technique: "ビルド",
-    choices: {
-      baseName: ["ジン"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["ライムジュース", "トニックウォーター"],
-      subName: ["なし", "レモンカット", "ライムカット", "スノースタイル"]
-    }
-  },
-  {
-    name: "モスコミュール",
-    course: "spirits",
-    baseName: "ウォッカ",
-    baseAmount: "45ml",
-    mixerName: "ジンジャーエール",
-    mixerAmount: "UP",
-    subName: "ライムカット",
-    glass: "ゾンビグラス",
-    technique: "ビルド",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["ライムジュース", "グレープフルーツジュース", "トニックウォーター", "ジンジャーエール"],
-      subName: ["なし", "レモンカット", "ライムカット", "スノースタイル"]
-    }
-  },
-  {
-    name: "スクリュードライバー",
-    course: "spirits",
-    baseName: "ウォッカ",
-    baseAmount: "45ml",
-    mixerName: "オレンジジュース",
-    mixerAmount: "UP",
-    subName: "なし",
-    glass: "コリンズグラス",
-    technique: "ビルド",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
-      subName: ["なし", "ライムカット", "レモンカット"]
-    }
-  },
-  {
-    name: "バラライカ",
-    course: "spirits",
-    baseName: "ウォッカ",
-    baseAmount: "30ml",
-    liqueurName: "コアントロー",
-    liqueurAmount: "15ml",
-    mixerName: "レモンジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      liqueurName: ["コアントロー", "アマレット", "ドライベルモット"],
-      mixerName: ["レモンジュース", "ライムジュース", "グレープフルーツジュース"],
-      subName: ["なし", "レモンカット", "ライムカット"]
-    }
-  },
-  {
-    name: "カミカゼ",
-    course: "spirits",
-    baseName: "ウォッカ",
-    baseAmount: "45ml",
-    liqueurName: "コアントロー",
-    liqueurAmount: "1tsp",
-    mixerName: "ライムジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "ロックグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      liqueurName: ["コアントロー", "ドライベルモット", "アマレット", "なし"],
-      mixerName: ["ライムジュース", "レモンジュース", "トニックウォーター"],
-      subName: ["なし", "ライムカット"]
-    }
-  },
-  {
-    name: "バカルディ",
-    course: "spirits",
-    baseName: "ラム",
-    baseAmount: "45ml",
-    mixerName: "ライムジュース",
-    mixerAmount: "15ml",
-    subName: "グレナデンシロップ",
-    subAmount: "1tsp",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      mixerName: ["ライムジュース", "レモンジュース", "オレンジジュース"],
-      subName: ["なし", "グレナデンシロップ", "ライムカット"],
-      subAmount: ["1tsp", "10ml", "15ml"]
-    }
-  },
-  {
-    name: "XYZ",
-    course: "spirits",
-    baseName: "ラム",
-    baseAmount: "30ml",
-    liqueurName: "コアントロー",
-    liqueurAmount: "15ml",
-    mixerName: "レモンジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["ジン", "ウォッカ", "ラム", "テキーラ"],
-      baseAmount: ["30ml", "45ml"],
-      liqueurName: ["コアントロー", "アマレット", "ブルーキュラソー"],
-      mixerName: ["レモンジュース", "ライムジュース", "グレープフルーツジュース"],
-      subName: ["なし", "レモンカット", "ライムカット"]
-    }
-  },
-  {
-    name: "マルガリータ",
-    course: "spirits",
-    baseName: "テキーラ",
-    baseAmount: "30ml",
-    liqueurName: "コアントロー",
-    liqueurAmount: "15ml",
-    mixerName: "レモンジュース",
-    mixerAmount: "15ml",
-    subName: "なし",
-    glass: "カクテルグラス",
-    technique: "シェイク",
-    choices: {
-      baseName: ["テキーラ", "ジン", "ラム", "ウォッカ"],
-      baseAmount: ["30ml", "45ml"],
-      liqueurName: ["コアントロー", "ドライベルモット", "ピーチリキュール"],
-      mixerName: ["レモンジュース", "ライムジュース", "オレンジジュース"],
-      subName: ["なし", "スノースタイル", "ライムカット"]
-    }
-  },
-  {
-  name: "テキーラサンライズ",
-  course: "spirits",
-  baseName: "テキーラ",
-  baseAmount: "45ml",
-  mixerName: "オレンジジュース",
-  mixerAmount: "UP",
-  subName: "グレナデンシロップ",
-  subAmount: "20ml",
-  glass: "専用グラス",
-  technique: "ビルド",
-  choices: {
-    baseName: ["テキーラ", "ウォッカ", "ラム", "ジン"],
-    baseAmount: ["30ml", "45ml"],
-    mixerName: ["オレンジジュース", "グレープフルーツジュース", "トニックウォーター"],
-    subName: ["なし", "グレナデンシロップ", "ライムカット"],
-    subAmount: ["1tsp", "10ml", "15ml", "20ml"]
-    }
-  }    
-];
+  } catch (error) {
+    console.error(error);
+
+    alert(
+      "レシピデータの読み込みに失敗しました。\n" +
+      "GitHub PagesのURL、またはローカルサーバーから開いてください。"
+    );
+  }
+}
+
+function isCocktailDataReady() {
+  return Array.isArray(cocktailData) && cocktailData.length > 0;
+}
 
 // --- ゲーム進行用の変数 ---
 const QUESTION_LIMIT = 10;
@@ -320,10 +90,9 @@ function shuffleArray(array) {
   return array;
 }
 
-window.onload = function() {
-  // 起動時はメニュー画面で待機
+window.onload = async function() {
+  await loadCocktailData();
 };
-
 // --- 画面制御 ---
 
 function hideAllScreens() {
@@ -337,6 +106,11 @@ function hideAllScreens() {
 }
 
 function showModeSelect(courseName) {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
   stopTimer(false);
 
   selectedCourse = courseName;
@@ -416,6 +190,11 @@ function resetTimeAttackTimerState() {
 // --- レシピ一覧・検索 ---
 
 function showRecipeList() {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
   stopTimer(false);
 
   hideAllScreens();
@@ -507,6 +286,11 @@ function renderRecipeList() {
 // --- ゲーム制御 ---
 
 function startQuiz(courseName, mode = "normal") {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
   selectedCourse = courseName;
   currentMode = mode;
 
@@ -525,10 +309,15 @@ function startQuiz(courseName, mode = "normal") {
 
   unusedCocktails = cocktailData.filter(cocktail => cocktail.course === courseName);
 
+  if (unusedCocktails.length === 0) {
+    alert("このコースのレシピがありません。");
+    returnToTitle();
+    return;
+  }
+
   setupTimerForMode();
   setRandomQuestion();
 }
-
 function setupTimerForMode() {
   const timerIndicator = document.getElementById("timer-indicator");
   const timerLabelPrefix = document.getElementById("timer-label-prefix");
@@ -1250,4 +1039,58 @@ setRandomQuestion = function() {
       document.body.scrollTop = 0;
     }
   }, 0);
+};
+// --- ノーマルモード10問目終了時のボタン表示修正 ---
+const originalShowFinalResultForLastQuestion = showFinalResult;
+
+showFinalResult = function() {
+  closeResultModal();
+  originalShowFinalResultForLastQuestion();
+};
+
+handleNormalAnswer = function() {
+  stopTimer();
+
+  const isCorrect = judgeCurrentAnswer(selectedAnswers);
+
+  const primaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #007bff; color: white; font-weight: bold; transition: 0.2s;";
+  const secondaryBtnStyle = "padding: 12px 20px; font-size: 16px; cursor: pointer; border-radius: 6px; border: none; background-color: #6c757d; color: white; font-weight: bold; transition: 0.2s;";
+
+  const isLastQuestion = currentQuestionNumber >= QUESTION_LIMIT;
+
+  const nextButtonText = isLastQuestion ? "結果へ" : "次の問題へ";
+  const nextButtonAction = isLastQuestion ? "showFinalResult()" : "setRandomQuestion()";
+
+  const actionsHtml = `
+    <button style="${secondaryBtnStyle}" onclick="retryQuestion()">もう一度</button>
+    <button style="${primaryBtnStyle}" onclick="${nextButtonAction}">${nextButtonText}</button>
+  `;
+
+  quizHistory.push({
+    cocktail: currentCocktail,
+    userAnswer: cloneSelectedAnswers(),
+    isCorrect
+  });
+
+  if (isCorrect) {
+    if (isFirstAttempt) {
+      correctCount++;
+    }
+
+    showResultModal(
+      "correct",
+      "⭕ 正解！",
+      `<div style="color: #28a745; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center;">完璧です！</div>${getRecipeSummaryHtml(currentCocktail)}`,
+      actionsHtml
+    );
+  } else {
+    isFirstAttempt = false;
+
+    showResultModal(
+      "wrong",
+      "❌ 不正解...",
+      `<div style="color: #dc3545; font-size: 18px; font-weight: bold; margin-bottom: 15px; text-align: center;">惜しい！正解はこちらです。</div>${getRecipeSummaryHtml(currentCocktail)}`,
+      actionsHtml
+    );
+  }
 };
