@@ -44,6 +44,7 @@ let currentCocktail = null;
 let selectedAnswers = {};
 let unusedCocktails = [];
 let selectedCourse = "";
+let selectedDifficulty = "beginner";
 let currentMode = "normal";
 
 let currentQuestionNumber = 0;
@@ -98,6 +99,7 @@ window.onload = async function() {
 
 function hideAllScreens() {
   document.getElementById("start-container").style.display = "none";
+  document.getElementById("difficulty-select-container").style.display = "none";
   document.getElementById("mode-select-container").style.display = "none";
   document.getElementById("recipe-list-container").style.display = "none";
   document.getElementById("quiz-container").style.display = "none";
@@ -108,17 +110,37 @@ function hideAllScreens() {
 
 function getCourseLabel(courseName) {
   if (courseName === "spirits") {
-    return "スピリッツベース（入門編）";
+    return "スピリッツベース";
   }
 
   if (courseName === "liqueur") {
-    return "リキュールベース（入門編）";
+    return "リキュールベース";
   }
 
   return courseName;
 }
 
-function showModeSelect(courseName) {
+function getDifficultyLabel(difficulty) {
+  if (difficulty === "beginner") {
+    return "初級";
+  }
+
+  if (difficulty === "intermediate") {
+    return "中級";
+  }
+
+  if (difficulty === "advanced") {
+    return "上級";
+  }
+
+  return difficulty;
+}
+
+function getCocktailDifficulty(cocktail) {
+  return cocktail.difficulty || "beginner";
+}
+
+function showDifficultySelect(courseName) {
   if (!isCocktailDataReady()) {
     alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
     return;
@@ -127,12 +149,34 @@ function showModeSelect(courseName) {
   stopTimer(false);
 
   selectedCourse = courseName;
+  selectedDifficulty = "beginner";
+
+  hideAllScreens();
+
+  const label = document.getElementById("difficulty-course-label");
+  if (label) {
+    label.textContent = getCourseLabel(courseName);
+  }
+
+  document.getElementById("difficulty-select-container").style.display = "block";
+}
+
+function showModeSelect(courseName, difficulty = "beginner") {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
+  stopTimer(false);
+
+  selectedCourse = courseName;
+  selectedDifficulty = difficulty;
 
   hideAllScreens();
 
   const label = document.getElementById("selected-course-label");
   if (label) {
-    label.textContent = getCourseLabel(courseName);
+    label.textContent = `${getCourseLabel(courseName)} / ${getDifficultyLabel(difficulty)}`;
   }
 
   document.getElementById("mode-select-container").style.display = "block";
@@ -247,6 +291,8 @@ function formatRecipeLine(cocktail) {
 function getRecipeSearchText(cocktail) {
   return [
     cocktail.name,
+    cocktail.course,
+    getCocktailDifficulty(cocktail),
     cocktail.baseName,
     cocktail.baseAmount,
     cocktail.liqueurName,
@@ -291,6 +337,7 @@ function renderRecipeList() {
 
       <div class="recipe-card__meta">
         <span>グラス：${cocktail.glass}</span>
+        <span>難易度：${getDifficultyLabel(getCocktailDifficulty(cocktail))}</span>
       </div>
     </article>
   `).join("");
@@ -298,13 +345,14 @@ function renderRecipeList() {
 
 // --- ゲーム制御 ---
 
-function startQuiz(courseName, mode = "normal") {
+function startQuiz(courseName, difficulty = "beginner", mode = "normal") {
   if (!isCocktailDataReady()) {
     alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
     return;
   }
 
   selectedCourse = courseName;
+  selectedDifficulty = difficulty;
   currentMode = mode;
 
   hideAllScreens();
@@ -320,11 +368,13 @@ function startQuiz(courseName, mode = "normal") {
   timeRemaining = TIME_LIMIT;
   isPaused = false;
 
-  unusedCocktails = cocktailData.filter(cocktail => cocktail.course === courseName);
+  unusedCocktails = cocktailData.filter(cocktail => {
+    return cocktail.course === courseName && getCocktailDifficulty(cocktail) === difficulty;
+  });
 
   if (unusedCocktails.length === 0) {
-    alert("このコースのレシピがありません。");
-    returnToTitle();
+    alert("この難易度のレシピはまだありません。");
+    showDifficultySelect(courseName);
     return;
   }
 

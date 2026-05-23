@@ -523,3 +523,15 @@ body.quiz-paused .pause-modal {
 .timer-indicator.time-attack-timer .timer-indicator__track {
     display: none;
 }
+.mode-card--disabled {
+    background-color: #f1f1f1;
+    border-color: #ddd;
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.mode-card--disabled:hover {
+    background-color: #f1f1f1;
+    border-color: #ddd;
+    transform: none;
+}
