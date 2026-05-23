@@ -1119,3 +1119,88 @@ function handleTimeAttackAnswer() {
 
   setRandomQuestion();
 }
+// --- 難易度表示とランダム出題の上書き実装 ---
+
+getDifficultyLabel = function(difficulty) {
+  if (difficulty === "beginner") {
+    return "初級";
+  }
+
+  if (difficulty === "intermediate") {
+    return "中級";
+  }
+
+  if (difficulty === "advanced") {
+    return "上級";
+  }
+
+  if (difficulty === "random") {
+    return "ランダム";
+  }
+
+  return difficulty;
+};
+
+showModeSelect = function(courseName, difficulty = "beginner") {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
+  stopTimer(false);
+
+  selectedCourse = courseName;
+  selectedDifficulty = difficulty;
+
+  hideAllScreens();
+
+  const label = document.getElementById("selected-course-label");
+  if (label) {
+    label.textContent = `${getCourseLabel(courseName)} / ${getDifficultyLabel(difficulty)}`;
+  }
+
+  document.getElementById("mode-select-container").style.display = "block";
+};
+
+startQuiz = function(courseName, difficulty = "beginner", mode = "normal") {
+  if (!isCocktailDataReady()) {
+    alert("レシピデータを読み込み中です。少し待ってからもう一度押してください。");
+    return;
+  }
+
+  selectedCourse = courseName;
+  selectedDifficulty = difficulty;
+  currentMode = mode;
+
+  hideAllScreens();
+
+  document.getElementById("quiz-container").style.display = "block";
+
+  currentQuestionNumber = 0;
+  correctCount = 0;
+  quizHistory = [];
+  totalStartTime = Date.now();
+  elapsedMilliseconds = 0;
+  activeStartTime = Date.now();
+  timeRemaining = TIME_LIMIT;
+  isPaused = false;
+
+  if (difficulty === "random") {
+    unusedCocktails = cocktailData.filter(cocktail => {
+      return cocktail.course === courseName;
+    });
+  } else {
+    unusedCocktails = cocktailData.filter(cocktail => {
+      return cocktail.course === courseName && getCocktailDifficulty(cocktail) === difficulty;
+    });
+  }
+
+  if (unusedCocktails.length === 0) {
+    alert("この難易度のレシピはまだありません。");
+    showDifficultySelect(courseName);
+    return;
+  }
+
+  setupTimerForMode();
+  setRandomQuestion();
+};

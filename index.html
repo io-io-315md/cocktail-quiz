@@ -33,17 +33,22 @@
     <div class="mode-menu">
       <button class="mode-card" onclick="showModeSelect(selectedCourse, 'beginner')">
         <span class="mode-card__title">初級</span>
-        <span class="mode-card__text">現在登録済みの基本レシピで練習するモード</span>
+        <span class="mode-card__text">基本的なレシピ</span>
       </button>
 
       <button class="mode-card mode-card--disabled" disabled>
         <span class="mode-card__title">中級</span>
-        <span class="mode-card__text">実装予定</span>
+        <span class="mode-card__text">まれに出るレシピ</span>
       </button>
 
       <button class="mode-card mode-card--disabled" disabled>
         <span class="mode-card__title">上級</span>
-        <span class="mode-card__text">実装予定</span>
+        <span class="mode-card__text">メニューにないレシピ</span>
+      </button>
+
+      <button class="mode-card" onclick="showModeSelect(selectedCourse, 'random')">
+        <span class="mode-card__title">ランダム</span>
+        <span class="mode-card__text">全レシピから出題</span>
       </button>
     </div>
 
@@ -184,6 +189,6 @@
     </div>
   </div>
   
-  <script src="app.js"></script>
+  <script src="app.js?v=1.6"></script>
 </body>
 </html>
