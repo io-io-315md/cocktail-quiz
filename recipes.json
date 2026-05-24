@@ -828,53 +828,6 @@
     }
   },
   {
-    "name": "チャイナブルー",
-    "course": "liqueur",
-    "baseName": "ライチリキュール",
-    "baseAmount": "30ml",
-    "liqueurName": "ブルーキュラソー",
-    "liqueurAmount": "10ml",
-    "mixerName": "グレープフルーツジュース",
-    "mixerAmount": "UP",
-    "subName": "なし",
-    "glass": "コリンズグラス/ゾンビグラス",
-    "technique": "ビルド",
-    "choices": {
-      "baseName": [
-        "ライチリキュール",
-        "カシスリキュール",
-        "ピーチリキュール",
-        "カンパリ"
-      ],
-      "baseAmount": [
-        "30ml",
-        "45ml"
-      ],
-      "liqueurName": [
-        "ブルーキュラソー",
-        "コアントロー",
-        "カンパリ",
-        "なし"
-      ],
-      "liqueurAmount": [
-        "1tsp",
-        "10ml",
-        "15ml"
-      ],
-      "mixerName": [
-        "グレープフルーツジュース",
-        "オレンジジュース",
-        "ソーダ",
-        "トニックウォーター"
-      ],
-      "subName": [
-        "なし",
-        "ライムカット",
-        "レモンカット"
-      ]
-    }
-  },
-  {
     "name": "ブルームーン",
     "course": "spirits",
     "difficulty": "intermediate",
