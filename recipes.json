@@ -434,3 +434,86 @@
     }
   }
 ]
+,
+{
+  "name": "ブルームーン",
+  "course": "spirits",
+  "difficulty": "intermediate",
+  "baseName": "ジン",
+  "baseAmount": "30ml",
+  "liqueurName": "パルフェタムール",
+  "liqueurAmount": "15ml",
+  "mixerName": "レモンジュース",
+  "mixerAmount": "15ml",
+  "subName": "なし",
+  "glass": "カクテルグラス",
+  "technique": "シェイク",
+  "choices": {
+    "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+    "baseAmount": ["30ml", "45ml"],
+    "liqueurName": ["パルフェタムール", "コアントロー", "ブルーキュラソー", "ピーチリキュール"],
+    "liqueurAmount": ["1tsp", "10ml", "15ml"],
+    "mixerName": ["レモンジュース", "ライムジュース", "グレープフルーツジュース"],
+    "mixerAmount": ["10ml", "15ml", "20ml"],
+    "subName": ["なし", "ライムカット", "レモンカット"]
+  }
+},
+{
+  "name": "ダイキリ",
+  "course": "spirits",
+  "difficulty": "intermediate",
+  "baseName": "ラム",
+  "baseAmount": "45ml",
+  "mixerName": "ライムジュース",
+  "mixerAmount": "15ml",
+  "subName": "ガムシロップ",
+  "subAmount": "1tsp",
+  "glass": "カクテルグラス",
+  "technique": "シェイク",
+  "choices": {
+    "baseName": ["ラム", "ジン", "ウォッカ", "テキーラ"],
+    "baseAmount": ["30ml", "45ml"],
+    "mixerName": ["ライムジュース", "レモンジュース", "グレープフルーツジュース"],
+    "mixerAmount": ["10ml", "15ml", "20ml"],
+    "subName": ["なし", "ガムシロップ", "グレナデンシロップ", "ライムカット"],
+    "subAmount": ["1tsp", "10ml", "15ml"]
+  }
+},
+{
+  "name": "ジンバック",
+  "course": "spirits",
+  "difficulty": "intermediate",
+  "baseName": "ジン",
+  "baseAmount": "45ml",
+  "mixerName": "ジンジャーエール",
+  "mixerAmount": "UP",
+  "subName": "ライムカット",
+  "glass": "コリンズグラス",
+  "technique": "ビルド",
+  "choices": {
+    "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+    "baseAmount": ["30ml", "45ml"],
+    "mixerName": ["ジンジャーエール", "ソーダ", "トニックウォーター", "オレンジジュース"],
+    "mixerAmount": ["30ml", "45ml", "UP"],
+    "subName": ["なし", "ライムカット", "レモンカット", "スノースタイル"]
+  }
+},
+{
+  "name": "ジンリッキー",
+  "course": "spirits",
+  "difficulty": "intermediate",
+  "baseName": "ジン",
+  "baseAmount": "45ml",
+  "mixerName": "ソーダ",
+  "mixerAmount": "UP",
+  "subName": "ライムカット",
+  "glass": "コリンズグラス",
+  "technique": "ビルド",
+  "choices": {
+    "baseName": ["ジン", "ウォッカ", "ラム", "テキーラ"],
+    "baseAmount": ["30ml", "45ml"],
+    "mixerName": ["ソーダ", "トニックウォーター", "ジンジャーエール", "オレンジジュース"],
+    "mixerAmount": ["30ml", "45ml", "UP"],
+    "subName": ["なし", "ライムカット", "レモンカット", "スノースタイル"]
+  }
+}

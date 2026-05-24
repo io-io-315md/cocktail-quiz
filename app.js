@@ -1551,3 +1551,200 @@ showFinalResult = function() {
     behavior: "auto"
   });
 };
+// --- ver1.9: グラス選択肢統合・コリンズ/ゾンビ同一判定 ---
+
+if (masterChoices && Array.isArray(masterChoices.glass)) {
+  masterChoices.glass = ["コリンズグラス/ゾンビグラス", "ロックグラス", "カクテルグラス", "専用グラス"];
+}
+
+function normalizeGlassValue(value) {
+  if (value === "コリンズグラス" || value === "ゾンビグラス" || value === "コリンズグラス/ゾンビグラス") {
+    return "コリンズグラス/ゾンビグラス";
+  }
+
+  return value;
+}
+
+const originalJudgeCurrentAnswerForGlass = judgeCurrentAnswer;
+
+judgeCurrentAnswer = function(answerObject = selectedAnswers) {
+  for (const key of categories) {
+    if (shouldSkipCategory(currentCocktail, key, answerObject)) continue;
+
+    let expected = getExpectedAnswerValue(currentCocktail, key);
+    let actual = getActualAnswerValue(answerObject, key);
+
+    if (key === "glass") {
+      expected = normalizeGlassValue(expected);
+      actual = normalizeGlassValue(actual);
+    }
+
+    if (key === "subAmount" && noAmountSubs.includes(answerObject.subName)) {
+      expected = "なし";
+      actual = "なし";
+    }
+
+    if (actual !== expected) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const originalFormatRecipeLineForGlass = formatRecipeLine;
+
+formatRecipeLine = function(cocktail) {
+  const parts = [`${cocktail.baseName} ${cocktail.baseAmount}`];
+
+  if (cocktail.liqueurName) {
+    parts.push(`${cocktail.liqueurName} ${cocktail.liqueurAmount}`);
+  }
+
+  if (cocktail.mixerName) {
+    parts.push(`${cocktail.mixerName} ${cocktail.mixerAmount}`);
+  }
+
+  if (cocktail.subName && cocktail.subName !== "なし") {
+    const subText = cocktail.subAmount
+      ? `${cocktail.subName} ${cocktail.subAmount}`
+      : cocktail.subName;
+
+    parts.push(subText);
+  }
+
+  return parts.join(" + ");
+};
+
+const originalBuildNormalResultHtmlForGlass = buildNormalResultHtml;
+
+buildNormalResultHtml = function() {
+  let historyHtml = "";
+
+  quizHistory.forEach((item, index) => {
+    const cocktail = item.cocktail || item;
+
+    let recipeLine = `${cocktail.baseName}(${cocktail.baseAmount})`;
+
+    if (cocktail.liqueurName) {
+      recipeLine += ` + ${cocktail.liqueurName}(${cocktail.liqueurAmount})`;
+    }
+
+    recipeLine += ` + ${cocktail.mixerName}(${cocktail.mixerAmount})`;
+
+    if (cocktail.subName !== "なし" && cocktail.subName !== "スノースタイル") {
+      let sub = cocktail.subName;
+
+      if (cocktail.subAmount && cocktail.subAmount !== "なし") {
+        sub += `(${cocktail.subAmount})`;
+      }
+
+      recipeLine += ` + ${sub}`;
+    } else if (cocktail.subName === "スノースタイル") {
+      recipeLine += " + スノースタイル";
+    }
+
+    recipeLine += ` [${normalizeGlassValue(cocktail.glass)} / ${cocktail.technique}]`;
+
+    historyHtml += `
+      <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #ddd;">
+        <strong style="color: #333; font-size: 15px;">Q${index + 1}. ${cocktail.name}</strong><br>
+        <span style="font-size: 13px; color: #666; display: block; margin-top: 4px;">${recipeLine}</span>
+      </div>
+    `;
+  });
+
+  return historyHtml;
+};
+
+const originalBuildTimeAttackResultHtmlForGlass = buildTimeAttackResultHtml;
+
+buildTimeAttackResultHtml = function() {
+  return quizHistory.map((item, index) => {
+    const badgeClass = item.isCorrect ? "correct" : "wrong";
+    const badgeText = item.isCorrect ? "正解" : "不正解";
+
+    return `
+      <div class="time-attack-row">
+        <div class="time-attack-row__title">
+          <strong>Q${index + 1}. ${item.cocktail.name}</strong>
+          <span class="result-badge ${badgeClass}">${badgeText}</span>
+        </div>
+
+        <p class="answer-line">あなたの回答：${formatAnswerSummary(item.userAnswer)}</p>
+        <p class="answer-line correct-answer">正解：${formatRecipeLine(item.cocktail)} / ${normalizeGlassValue(item.cocktail.glass)} / ${item.cocktail.technique}</p>
+      </div>
+    `;
+  }).join("");
+};
+
+const originalGetRecipeSummaryHtmlForGlass = getRecipeSummaryHtml;
+
+getRecipeSummaryHtml = function(ans) {
+  let liqueurHtml = "";
+
+  if (ans.liqueurName) {
+    const liqText = ans.liqueurAmount
+      ? `${ans.liqueurName} ${ans.liqueurAmount}`
+      : ans.liqueurName;
+
+    liqueurHtml = `<dt style="font-weight: bold; float: left; width: 80px; color: #555;">材料:</dt><dd style="margin-left: 80px; margin-bottom: 8px;">${liqText}</dd>`;
+  }
+
+  const mixerText = ans.mixerAmount ? `${ans.mixerName} ${ans.mixerAmount}` : ans.mixerName;
+  const subText = ans.subAmount ? `${ans.subName} ${ans.subAmount}` : ans.subName;
+  const glassText = normalizeGlassValue(ans.glass);
+
+  return `
+    <div class="recipe-summary" style="text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee;">
+      <h3 style="margin-top: 0; font-size: 16px; border-bottom: 2px solid #ddd; padding-bottom: 8px;">レシピまとめ</h3>
+      <dl style="margin: 0; font-size: 14px; line-height: 1.6;">
+        <dt style="font-weight: bold; float: left; width: 80px; color: #555;">ベース:</dt><dd style="margin-left: 80px; margin-bottom: 8px;">${ans.baseName} ${ans.baseAmount}</dd>
+        ${liqueurHtml}
+        <dt style="font-weight: bold; float: left; width: 80px; color: #555;">割材:</dt><dd style="margin-left: 80px; margin-bottom: 8px;">${mixerText}</dd>
+        <dt style="font-weight: bold; float: left; width: 80px; color: #555;">副材料:</dt><dd style="margin-left: 80px; margin-bottom: 8px;">${subText}</dd>
+        <dt style="font-weight: bold; float: left; width: 80px; color: #555;">グラス:</dt><dd style="margin-left: 80px; margin-bottom: 8px;">${glassText}</dd>
+        <dt style="font-weight: bold; float: left; width: 80px; color: #555;">技法:</dt><dd style="margin-left: 80px; margin-bottom: 0;">${ans.technique}</dd>
+      </dl>
+    </div>
+  `;
+};
+
+const originalRenderRecipeListForGlass = renderRecipeList;
+
+renderRecipeList = function() {
+  const listEl = document.getElementById("recipe-list-view");
+  const countEl = document.getElementById("recipe-count");
+  const searchInput = document.getElementById("recipe-search-input");
+
+  if (!listEl || !countEl) return;
+
+  const keyword = searchInput ? searchInput.value.trim().toLowerCase() : "";
+
+  const filteredRecipes = cocktailData.filter(cocktail => {
+    return getRecipeSearchText(cocktail).includes(keyword);
+  });
+
+  countEl.textContent = `${filteredRecipes.length} / ${cocktailData.length} 件`;
+
+  if (filteredRecipes.length === 0) {
+    listEl.innerHTML = '<div class="empty-message">該当するレシピがありません。</div>';
+    return;
+  }
+
+  listEl.innerHTML = filteredRecipes.map(cocktail => `
+    <article class="recipe-card">
+      <div class="recipe-card__top">
+        <h3>${cocktail.name}</h3>
+        <span class="recipe-card__badge">${cocktail.technique}</span>
+      </div>
+
+      <p class="recipe-card__line">${formatRecipeLine(cocktail)}</p>
+
+      <div class="recipe-card__meta">
+        <span>グラス：${normalizeGlassValue(cocktail.glass)}</span>
+        <span>難易度：${getDifficultyLabel(getCocktailDifficulty(cocktail))}</span>
+      </div>
+    </article>
+  `).join("");
+};
