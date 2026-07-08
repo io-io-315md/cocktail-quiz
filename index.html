@@ -81,14 +81,16 @@
     </div>
 
     <div class="recipe-source-panel">
-      <input
-        type="password"
-        id="recipe-source-password"
-        class="recipe-search-input"
-        placeholder="パスワード"
-        onkeydown="handleRecipeSourcePasswordKey(event)"
-      >
-      <button class="menu-btn" onclick="unlockRecipeSource()">開く</button>
+      <div id="recipe-source-login" class="recipe-source-login">
+        <input
+          type="password"
+          id="recipe-source-password"
+          class="recipe-search-input"
+          placeholder="パスワード"
+          onkeydown="handleRecipeSourcePasswordKey(event)"
+        >
+        <button class="menu-btn" onclick="unlockRecipeSource()">開く</button>
+      </div>
       <p id="recipe-source-message" class="recipe-source-message" aria-live="polite"></p>
 
       <div id="recipe-source-links" class="recipe-source-links" style="display: none;">
@@ -101,14 +103,11 @@
         >
 
         <div class="recipe-source-actions">
-          <a id="recipe-source-open" class="menu-btn" href="#" target="_blank" rel="noopener">Excelで開く</a>
-          <a id="recipe-source-download" class="menu-btn" href="#" download="recipes.csv">CSV保存</a>
-          <button class="menu-btn" onclick="copyRecipeCsvUrl()">URLコピー</button>
+          <button class="menu-btn" onclick="downloadRecipeCsv()">CSV保存</button>
         </div>
 
         <div class="recipe-source-import">
-          <p id="recipe-source-status" class="recipe-source-status"></p>
-          <label for="recipe-source-file">編集済みCSV</label>
+          <label for="recipe-source-file">上書き用CSV</label>
           <input
             type="file"
             id="recipe-source-file"
@@ -116,8 +115,7 @@
             accept=".csv,text/csv"
           >
           <div class="recipe-source-actions">
-            <button class="menu-btn" onclick="overwriteRecipesFromCsvFile()">CSVを上書き反映</button>
-            <button class="menu-btn secondary" onclick="restorePublishedRecipesCsv()">公開CSVに戻す</button>
+            <button class="menu-btn" onclick="overwriteRecipesFromCsvFile()">全端末へ上書き反映</button>
           </div>
         </div>
       </div>
@@ -215,6 +213,7 @@
     </div>
   </div>
   
-  <script src="app.js?v=3.1"></script>
+  <script src="recipe-api-config.js?v=1.0"></script>
+  <script src="app.js?v=4.0"></script>
 </body>
 </html>
