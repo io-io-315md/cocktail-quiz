@@ -8,21 +8,159 @@ const masterChoices = {
 // --- カクテルデータ ---
 let cocktailData = [];
 
+const RECIPE_CSV_FILE = "recipes.csv";
+const RECIPE_ACCESS_PASSWORD = "kirameki";
+
+const recipeFields = [
+  "name",
+  "course",
+  "difficulty",
+  "baseName",
+  "baseAmount",
+  "liqueurName",
+  "liqueurAmount",
+  "mixerName",
+  "mixerAmount",
+  "subName",
+  "subAmount",
+  "glass",
+  "technique"
+];
+
+const recipeChoiceColumns = {
+  choices_baseName: "baseName",
+  choices_baseAmount: "baseAmount",
+  choices_liqueurName: "liqueurName",
+  choices_liqueurAmount: "liqueurAmount",
+  choices_mixerName: "mixerName",
+  choices_mixerAmount: "mixerAmount",
+  choices_subName: "subName",
+  choices_subAmount: "subAmount",
+  choices_glass: "glass"
+};
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        cell += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === "," && !inQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if ((char === "\n" || char === "\r") && !inQuotes) {
+      if (char === "\r" && nextChar === "\n") {
+        i++;
+      }
+
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    cell += char;
+  }
+
+  if (cell !== "" || row.length > 0) {
+    row.push(cell);
+    rows.push(row);
+  }
+
+  return rows.filter(currentRow => currentRow.some(value => value.trim() !== ""));
+}
+
+function getCsvValue(row, headerIndexes, columnName) {
+  const index = headerIndexes[columnName];
+
+  if (index === undefined) {
+    return "";
+  }
+
+  return (row[index] || "").trim();
+}
+
+function splitCsvChoices(value) {
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split("|")
+    .map(choice => choice.trim())
+    .filter(Boolean);
+}
+
+function convertCsvRowsToCocktails(rows) {
+  if (!Array.isArray(rows) || rows.length < 2) {
+    return [];
+  }
+
+  const headers = rows[0].map(header => header.trim());
+  const headerIndexes = headers.reduce((indexes, header, index) => {
+    indexes[header] = index;
+    return indexes;
+  }, {});
+
+  return rows.slice(1).map(row => {
+    const cocktail = {};
+
+    recipeFields.forEach(field => {
+      const value = getCsvValue(row, headerIndexes, field);
+
+      if (value) {
+        cocktail[field] = value;
+      }
+    });
+
+    cocktail.choices = {};
+
+    Object.entries(recipeChoiceColumns).forEach(([columnName, choiceKey]) => {
+      const choices = splitCsvChoices(getCsvValue(row, headerIndexes, columnName));
+
+      if (choices.length > 0) {
+        cocktail.choices[choiceKey] = choices;
+      }
+    });
+
+    return cocktail;
+  }).filter(cocktail => cocktail.name);
+}
+
 // --- レシピデータ読み込み ---
 async function loadCocktailData() {
   try {
-    const response = await fetch(`recipes.json?cacheBust=${Date.now()}`, {
+    const response = await fetch(`${RECIPE_CSV_FILE}?cacheBust=${Date.now()}`, {
       cache: "no-store"
     });
 
     if (!response.ok) {
-      throw new Error(`recipes.json の読み込みに失敗しました: ${response.status}`);
+      throw new Error(`${RECIPE_CSV_FILE} の読み込みに失敗しました: ${response.status}`);
     }
 
-    cocktailData = await response.json();
+    const csvText = await response.text();
+    cocktailData = convertCsvRowsToCocktails(parseCsv(csvText));
 
     if (!Array.isArray(cocktailData) || cocktailData.length === 0) {
-      throw new Error("recipes.json の中身が空、または配列ではありません。");
+      throw new Error(`${RECIPE_CSV_FILE} の中身が空、またはCSVとして読み込めません。`);
     }
   } catch (error) {
     console.error(error);
@@ -104,6 +242,7 @@ function hideAllScreens() {
   document.getElementById("difficulty-select-container").style.display = "none";
   document.getElementById("mode-select-container").style.display = "none";
   document.getElementById("recipe-list-container").style.display = "none";
+  document.getElementById("recipe-source-container").style.display = "none";
   document.getElementById("quiz-container").style.display = "none";
   document.getElementById("final-result-container").style.display = "none";
 
@@ -266,6 +405,114 @@ function showRecipeList() {
   }
 
   renderRecipeList();
+}
+
+function getRecipeCsvUrl() {
+  return new URL(RECIPE_CSV_FILE, window.location.href).href;
+}
+
+function showRecipeSourceAccess() {
+  stopTimer(false);
+
+  hideAllScreens();
+
+  document.getElementById("recipe-source-container").style.display = "block";
+
+  const passwordInput = document.getElementById("recipe-source-password");
+  const messageEl = document.getElementById("recipe-source-message");
+  const linksEl = document.getElementById("recipe-source-links");
+
+  if (passwordInput) {
+    passwordInput.value = "";
+    passwordInput.focus();
+  }
+
+  if (messageEl) {
+    messageEl.textContent = "";
+    messageEl.classList.remove("is-success");
+  }
+
+  if (linksEl) {
+    linksEl.style.display = "none";
+  }
+}
+
+function unlockRecipeSource() {
+  const passwordInput = document.getElementById("recipe-source-password");
+  const messageEl = document.getElementById("recipe-source-message");
+  const linksEl = document.getElementById("recipe-source-links");
+  const urlInput = document.getElementById("recipe-source-url");
+  const openLink = document.getElementById("recipe-source-open");
+  const downloadLink = document.getElementById("recipe-source-download");
+  const password = passwordInput ? passwordInput.value : "";
+
+  if (password !== RECIPE_ACCESS_PASSWORD) {
+    if (messageEl) {
+      messageEl.textContent = "パスワードが違います。";
+      messageEl.classList.remove("is-success");
+    }
+
+    if (linksEl) {
+      linksEl.style.display = "none";
+    }
+
+    return;
+  }
+
+  const csvUrl = getRecipeCsvUrl();
+
+  if (urlInput) {
+    urlInput.value = csvUrl;
+  }
+
+  if (openLink) {
+    openLink.href = csvUrl;
+  }
+
+  if (downloadLink) {
+    downloadLink.href = csvUrl;
+  }
+
+  if (messageEl) {
+    messageEl.textContent = "";
+    messageEl.classList.remove("is-success");
+  }
+
+  if (linksEl) {
+    linksEl.style.display = "block";
+  }
+}
+
+function handleRecipeSourcePasswordKey(event) {
+  if (event.key === "Enter") {
+    unlockRecipeSource();
+  }
+}
+
+async function copyRecipeCsvUrl() {
+  const urlInput = document.getElementById("recipe-source-url");
+
+  if (!urlInput || !urlInput.value) {
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(urlInput.value);
+
+    const messageEl = document.getElementById("recipe-source-message");
+    if (messageEl) {
+      messageEl.textContent = "URLをコピーしました。";
+      messageEl.classList.add("is-success");
+    }
+  } catch (error) {
+    urlInput.select();
+
+    const messageEl = document.getElementById("recipe-source-message");
+    if (messageEl) {
+      messageEl.textContent = "URLを選択しました。";
+      messageEl.classList.add("is-success");
+    }
+  }
 }
 
 function formatRecipeLine(cocktail) {
@@ -2006,6 +2253,7 @@ hideAllScreens = function() {
     "difficulty-select-container",
     "mode-select-container",
     "recipe-list-container",
+    "recipe-source-container",
     "quiz-container",
     "final-result-container"
   ];

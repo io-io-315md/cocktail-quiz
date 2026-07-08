@@ -207,6 +207,15 @@ h3 {
     background-color: #23272b;
 }
 
+.recipe-source-btn {
+    background-color: #198754;
+    box-shadow: 0 4px 10px rgba(25, 135, 84, 0.2);
+}
+
+.recipe-source-btn:hover {
+    background-color: #146c43;
+}
+
 .recipe-list-header {
     display: flex;
     justify-content: space-between;
@@ -332,6 +341,73 @@ h3 {
     background-color: #f8f9fa;
     border-radius: 8px;
     padding: 25px 10px;
+}
+
+.recipe-source-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recipe-source-message {
+    min-height: 20px;
+    margin: 0;
+    color: #dc3545;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.recipe-source-message.is-success {
+    color: #198754;
+}
+
+.recipe-source-links {
+    border-top: 1px solid #eee;
+    padding-top: 14px;
+}
+
+.recipe-source-links label {
+    display: block;
+    margin-bottom: 6px;
+    color: #555;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.recipe-source-url {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.recipe-source-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.recipe-source-actions .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: normal;
+}
+
+@media (max-width: 520px) {
+    .recipe-source-actions {
+        grid-template-columns: 1fr;
+    }
 }
 
 .mode-header {

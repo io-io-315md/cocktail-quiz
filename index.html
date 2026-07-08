@@ -22,6 +22,7 @@
       <button class="menu-btn" onclick="showModeSelect('all', 'advanced')">上級編</button>
       <button class="menu-btn" onclick="showModeSelect('all', 'random')">ランダム</button>
       <button class="menu-btn recipe-list-btn" onclick="showRecipeList()">レシピ一覧</button>
+      <button class="menu-btn recipe-source-btn" onclick="showRecipeSourceAccess()">レシピ管理</button>
     </div>
   </div>
 
@@ -68,6 +69,44 @@
 
     <div id="recipe-count" class="recipe-count"></div>
     <div id="recipe-list-view" class="recipe-list-view"></div>
+  </div>
+
+  <div id="recipe-source-container" class="container" style="display: none;">
+    <div class="recipe-list-header">
+      <div>
+        <p class="screen-label">Recipe Source</p>
+        <h2>レシピ管理</h2>
+      </div>
+      <button class="back-btn" onclick="returnToTitle()">タイトルへ</button>
+    </div>
+
+    <div class="recipe-source-panel">
+      <input
+        type="password"
+        id="recipe-source-password"
+        class="recipe-search-input"
+        placeholder="パスワード"
+        onkeydown="handleRecipeSourcePasswordKey(event)"
+      >
+      <button class="menu-btn" onclick="unlockRecipeSource()">開く</button>
+      <p id="recipe-source-message" class="recipe-source-message" aria-live="polite"></p>
+
+      <div id="recipe-source-links" class="recipe-source-links" style="display: none;">
+        <label for="recipe-source-url">CSV URL</label>
+        <input
+          type="text"
+          id="recipe-source-url"
+          class="recipe-source-url"
+          readonly
+        >
+
+        <div class="recipe-source-actions">
+          <a id="recipe-source-open" class="menu-btn" href="#" target="_blank" rel="noopener">Excelで開く</a>
+          <a id="recipe-source-download" class="menu-btn" href="#" download="recipes.csv">CSV保存</a>
+          <button class="menu-btn" onclick="copyRecipeCsvUrl()">URLコピー</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="quiz-container" class="container" style="display: none;">
@@ -161,6 +200,6 @@
     </div>
   </div>
   
-  <script src="app.js?v=2.2"></script>
+  <script src="app.js?v=3.0"></script>
 </body>
 </html>
