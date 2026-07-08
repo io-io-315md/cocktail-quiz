@@ -105,6 +105,21 @@
           <a id="recipe-source-download" class="menu-btn" href="#" download="recipes.csv">CSV保存</a>
           <button class="menu-btn" onclick="copyRecipeCsvUrl()">URLコピー</button>
         </div>
+
+        <div class="recipe-source-import">
+          <p id="recipe-source-status" class="recipe-source-status"></p>
+          <label for="recipe-source-file">編集済みCSV</label>
+          <input
+            type="file"
+            id="recipe-source-file"
+            class="recipe-source-file"
+            accept=".csv,text/csv"
+          >
+          <div class="recipe-source-actions">
+            <button class="menu-btn" onclick="overwriteRecipesFromCsvFile()">CSVを上書き反映</button>
+            <button class="menu-btn secondary" onclick="restorePublishedRecipesCsv()">公開CSVに戻す</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -200,6 +215,6 @@
     </div>
   </div>
   
-  <script src="app.js?v=3.0"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>

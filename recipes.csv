@@ -1,4 +1,4 @@
-name,course,difficulty,baseName,baseAmount,liqueurName,liqueurAmount,mixerName,mixerAmount,subName,subAmount,glass,technique,choices_baseName,choices_baseAmount,choices_liqueurName,choices_liqueurAmount,choices_mixerName,choices_mixerAmount,choices_subName,choices_subAmount,choices_glass
+﻿name,course,difficulty,baseName,baseAmount,liqueurName,liqueurAmount,mixerName,mixerAmount,subName,subAmount,glass,technique,choices_baseName,choices_baseAmount,choices_liqueurName,choices_liqueurAmount,choices_mixerName,choices_mixerAmount,choices_subName,choices_subAmount,choices_glass
 ジントニック,spirits,,ジン,45ml,,,トニックウォーター,UP,ライムカット,,コリンズグラス/ゾンビグラス,ビルド,ジン,30ml|45ml,,,トニックウォーター|ソーダ|ジンジャーエール,,なし|ライムカット|レモンカット,,
 ホワイトレディ,spirits,,ジン,30ml,コアントロー,15ml,レモンジュース,15ml,なし,,カクテルグラス,シェイク,ジン|ウォッカ|ラム|テキーラ,30ml|45ml,コアントロー|アマレット|ピーチリキュール,,ジンジャーエール|レモンジュース|ライムジュース|トニックウォーター,,なし|ドライベルモット|オリーブ,,
 マティーニ,spirits,,ジン,45ml,,,ドライベルモット,15ml,オリーブ,,カクテルグラス,ステア,ジン|ウォッカ|ラム|テキーラ,30ml|45ml|60ml,,,オレンジジュース|ドライベルモット|ソーダ,,なし|レモンカット|ライムカット|オリーブ,,

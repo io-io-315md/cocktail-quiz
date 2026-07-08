@@ -385,6 +385,29 @@ h3 {
     background-color: #f8f9fa;
 }
 
+.recipe-source-import {
+    border-top: 1px solid #eee;
+    margin-top: 16px;
+    padding-top: 14px;
+}
+
+.recipe-source-status {
+    margin: 0 0 12px;
+    color: #555;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.recipe-source-file {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 11px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
 .recipe-source-actions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -402,6 +425,15 @@ h3 {
     font-size: 14px;
     text-decoration: none;
     white-space: normal;
+}
+
+.recipe-source-actions .menu-btn.secondary {
+    background-color: #6c757d;
+    box-shadow: 0 4px 10px rgba(108, 117, 125, 0.18);
+}
+
+.recipe-source-actions .menu-btn.secondary:hover {
+    background-color: #5a6268;
 }
 
 @media (max-width: 520px) {
