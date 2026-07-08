@@ -1362,10 +1362,10 @@
     }
   },
   {
-    "name": "メロンフィズ",
+    "name": "各種フィズ",
     "course": "liqueur",
     "difficulty": "intermediate",
-    "baseName": "メロンリキュール",
+    "baseName": "各種リキュール",
     "baseAmount": "45ml",
     "liqueurName": "ガムシロップ",
     "liqueurAmount": "1tsp",
@@ -1377,130 +1377,7 @@
     "technique": "シェイク",
     "choices": {
       "baseName": [
-        "メロンリキュール",
-        "ストロベリーリキュール",
-        "バイオレットリキュール",
-        "カシスリキュール"
-      ],
-      "baseAmount": [
-        "30ml",
-        "45ml"
-      ],
-      "liqueurName": [
-        "ガムシロップ",
-        "シロップ",
-        "グレナデンシロップ",
-        "なし"
-      ],
-      "liqueurAmount": [
-        "1tsp",
-        "5ml",
-        "10ml",
-        "15ml"
-      ],
-      "mixerName": [
-        "ソーダ",
-        "トニックウォーター",
-        "ジンジャーエール",
-        "オレンジジュース"
-      ],
-      "mixerAmount": [
-        "30ml",
-        "45ml",
-        "UP"
-      ],
-      "subName": [
-        "なし",
-        "レモンジュース",
-        "ライムジュース"
-      ],
-      "subAmount": [
-        "1tsp",
-        "10ml",
-        "15ml"
-      ]
-    }
-  },
-  {
-    "name": "ストロベリーフィズ",
-    "course": "liqueur",
-    "difficulty": "intermediate",
-    "baseName": "ストロベリーリキュール",
-    "baseAmount": "45ml",
-    "liqueurName": "ガムシロップ",
-    "liqueurAmount": "1tsp",
-    "mixerName": "ソーダ",
-    "mixerAmount": "UP",
-    "subName": "レモンジュース",
-    "subAmount": "15ml",
-    "glass": "コリンズグラス/ゾンビグラス",
-    "technique": "シェイク",
-    "choices": {
-      "baseName": [
-        "ストロベリーリキュール",
-        "メロンリキュール",
-        "バイオレットリキュール",
-        "カシスリキュール"
-      ],
-      "baseAmount": [
-        "30ml",
-        "45ml"
-      ],
-      "liqueurName": [
-        "ガムシロップ",
-        "シロップ",
-        "グレナデンシロップ",
-        "なし"
-      ],
-      "liqueurAmount": [
-        "1tsp",
-        "5ml",
-        "10ml",
-        "15ml"
-      ],
-      "mixerName": [
-        "ソーダ",
-        "トニックウォーター",
-        "ジンジャーエール",
-        "オレンジジュース"
-      ],
-      "mixerAmount": [
-        "30ml",
-        "45ml",
-        "UP"
-      ],
-      "subName": [
-        "なし",
-        "レモンジュース",
-        "ライムジュース"
-      ],
-      "subAmount": [
-        "1tsp",
-        "10ml",
-        "15ml"
-      ]
-    }
-  },
-  {
-    "name": "バイオレットフィズ",
-    "course": "liqueur",
-    "difficulty": "intermediate",
-    "baseName": "バイオレットリキュール",
-    "baseAmount": "45ml",
-    "liqueurName": "ガムシロップ",
-    "liqueurAmount": "1tsp",
-    "mixerName": "ソーダ",
-    "mixerAmount": "UP",
-    "subName": "レモンジュース",
-    "subAmount": "15ml",
-    "glass": "コリンズグラス/ゾンビグラス",
-    "technique": "シェイク",
-    "choices": {
-      "baseName": [
-        "バイオレットリキュール",
-        "メロンリキュール",
-        "ストロベリーリキュール",
-        "カシスリキュール"
+        "各種リキュール"
       ],
       "baseAmount": [
         "30ml",
@@ -1783,8 +1660,8 @@
         "スパークリングワイン"
       ],
       "baseAmount": [
-        "30ml",
         "45ml",
+        "80ml",
         "90ml"
       ],
       "mixerName": [
