@@ -4,10 +4,11 @@ const PASSWORD = "kirameki";
 function doGet(e) {
   const csvText = getRecipeCsvText_();
   const callback = e && e.parameter ? e.parameter.callback : "";
+  const spreadsheetUrl = getRecipeSheetUrl_();
 
   if (callback) {
     return ContentService
-      .createTextOutput(`${callback}(${JSON.stringify({ ok: true, csvText })});`)
+      .createTextOutput(`${callback}(${JSON.stringify({ ok: true, csvText, spreadsheetUrl })});`)
       .setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
 
@@ -52,7 +53,8 @@ function doPost(e) {
 
     return createJsonOutput_({
       ok: true,
-      rowCount: Math.max(normalizedRows.length - 1, 0)
+      rowCount: Math.max(normalizedRows.length - 1, 0),
+      spreadsheetUrl: getRecipeSheetUrl_()
     });
   } catch (error) {
     return createJsonOutput_({
@@ -65,6 +67,11 @@ function doPost(e) {
 function getRecipeSheet_() {
   const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   return spreadsheet.getSheetByName(SHEET_NAME) || spreadsheet.insertSheet(SHEET_NAME);
+}
+
+function getRecipeSheetUrl_() {
+  const sheet = getRecipeSheet_();
+  return `${SpreadsheetApp.getActiveSpreadsheet().getUrl()}#gid=${sheet.getSheetId()}`;
 }
 
 function getRecipeCsvText_() {

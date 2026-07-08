@@ -94,29 +94,18 @@
       <p id="recipe-source-message" class="recipe-source-message" aria-live="polite"></p>
 
       <div id="recipe-source-links" class="recipe-source-links" style="display: none;">
-        <label for="recipe-source-url">CSV URL</label>
+        <label for="recipe-source-url">スプレッドシートURL</label>
         <input
           type="text"
           id="recipe-source-url"
           class="recipe-source-url"
+          placeholder="Apps Script更新後に自動取得されます"
           readonly
         >
 
         <div class="recipe-source-actions">
-          <button class="menu-btn" onclick="downloadRecipeCsv()">CSV保存</button>
-        </div>
-
-        <div class="recipe-source-import">
-          <label for="recipe-source-file">上書き用CSV</label>
-          <input
-            type="file"
-            id="recipe-source-file"
-            class="recipe-source-file"
-            accept=".csv,text/csv"
-          >
-          <div class="recipe-source-actions">
-            <button class="menu-btn" onclick="overwriteRecipesFromCsvFile()">全端末へ上書き反映</button>
-          </div>
+          <button class="menu-btn" onclick="openRecipeSpreadsheet()">スプレッドシートを開く</button>
+          <button class="menu-btn secondary" onclick="refreshRecipesFromSheet()">シートから再読み込み</button>
         </div>
       </div>
     </div>
@@ -213,7 +202,7 @@
     </div>
   </div>
   
-  <script src="recipe-api-config.js?v=1.0"></script>
-  <script src="app.js?v=4.0"></script>
+  <script src="recipe-api-config.js?v=2.0"></script>
+  <script src="app.js?v=5.0"></script>
 </body>
 </html>

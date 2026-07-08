@@ -11,6 +11,8 @@ let cocktailData = [];
 const RECIPE_CSV_FILE = "recipes.csv";
 const RECIPE_ACCESS_PASSWORD = "kirameki";
 const RECIPE_API_URL = (window.RECIPE_API_URL || "").trim();
+const RECIPE_SHEET_URL = (window.RECIPE_SHEET_URL || "").trim();
+let sharedRecipeSheetUrl = "";
 
 const recipeFields = [
   "name",
@@ -39,11 +41,6 @@ const recipeChoiceColumns = {
   choices_subAmount: "subAmount",
   choices_glass: "glass"
 };
-
-const recipeCsvColumns = [
-  ...recipeFields,
-  ...Object.keys(recipeChoiceColumns)
-];
 
 function parseCsv(text) {
   const normalizedText = text.replace(/^\uFEFF/, "");
@@ -116,37 +113,6 @@ function splitCsvChoices(value) {
     .filter(Boolean);
 }
 
-function escapeCsvCell(value) {
-  const text = value == null ? "" : String(value);
-
-  if (/[",\r\n]/.test(text)) {
-    return `"${text.replace(/"/g, '""')}"`;
-  }
-
-  return text;
-}
-
-function convertCocktailsToCsv(cocktails) {
-  const rows = [recipeCsvColumns];
-
-  cocktails.forEach(cocktail => {
-    rows.push(recipeCsvColumns.map(column => {
-      if (column.startsWith("choices_")) {
-        const choiceKey = recipeChoiceColumns[column];
-        const choices = cocktail.choices && Array.isArray(cocktail.choices[choiceKey])
-          ? cocktail.choices[choiceKey]
-          : [];
-
-        return choices.join("|");
-      }
-
-      return cocktail[column] || "";
-    }));
-  });
-
-  return "\uFEFF" + rows.map(row => row.map(escapeCsvCell).join(",")).join("\r\n") + "\r\n";
-}
-
 function findRecipeHeaderRowIndex(rows) {
   return rows.findIndex(row => {
     const firstCell = row && row[0] ? row[0].replace(/^\uFEFF/, "").trim() : "";
@@ -211,10 +177,6 @@ function applyRecipeCsvText(csvText) {
   return nextCocktailData.length;
 }
 
-function getRecipeCsvSignature(csvText) {
-  return JSON.stringify(parseRecipeCsvText(csvText));
-}
-
 function isRecipeApiConfigured() {
   return Boolean(RECIPE_API_URL);
 }
@@ -261,6 +223,10 @@ function loadRecipeCsvFromApi() {
         return;
       }
 
+      if (payload.spreadsheetUrl) {
+        sharedRecipeSheetUrl = payload.spreadsheetUrl;
+      }
+
       resolve(payload.csvText || "");
     };
 
@@ -275,65 +241,6 @@ function loadRecipeCsvFromApi() {
     };
 
     document.head.appendChild(script);
-  });
-}
-
-function submitRecipeCsvToApi(csvText) {
-  if (!isRecipeApiConfigured()) {
-    return Promise.reject(new Error("Recipe API URL is not configured."));
-  }
-
-  return new Promise((resolve, reject) => {
-    const frameName = `recipeCsvUpload_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const iframe = document.createElement("iframe");
-    const form = document.createElement("form");
-    const input = document.createElement("input");
-    const timeoutId = window.setTimeout(() => {
-      cleanup();
-      reject(new Error("Recipe API upload timed out."));
-    }, 30000);
-    let formSubmitted = false;
-
-    function cleanup() {
-      window.clearTimeout(timeoutId);
-
-      if (form.parentNode) {
-        form.parentNode.removeChild(form);
-      }
-
-      if (iframe.parentNode) {
-        iframe.parentNode.removeChild(iframe);
-      }
-    }
-
-    iframe.name = frameName;
-    iframe.style.display = "none";
-    iframe.onload = () => {
-      if (!formSubmitted) {
-        return;
-      }
-
-      cleanup();
-      resolve();
-    };
-
-    form.method = "POST";
-    form.action = RECIPE_API_URL;
-    form.target = frameName;
-    form.style.display = "none";
-
-    input.type = "hidden";
-    input.name = "payload";
-    input.value = JSON.stringify({
-      password: RECIPE_ACCESS_PASSWORD,
-      csvText
-    });
-
-    form.appendChild(input);
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
-    formSubmitted = true;
-    form.submit();
   });
 }
 
@@ -613,6 +520,10 @@ function getRecipeCsvUrl() {
   return new URL(RECIPE_CSV_FILE, window.location.href).href;
 }
 
+function getRecipeSheetUrl() {
+  return RECIPE_SHEET_URL || sharedRecipeSheetUrl;
+}
+
 function setRecipeSourceMessage(text, isSuccess = false) {
   const messageEl = document.getElementById("recipe-source-message");
 
@@ -634,7 +545,6 @@ function showRecipeSourceAccess() {
   const passwordInput = document.getElementById("recipe-source-password");
   const loginEl = document.getElementById("recipe-source-login");
   const linksEl = document.getElementById("recipe-source-links");
-  const fileInput = document.getElementById("recipe-source-file");
 
   if (passwordInput) {
     passwordInput.value = "";
@@ -650,11 +560,6 @@ function showRecipeSourceAccess() {
   if (linksEl) {
     linksEl.style.display = "none";
   }
-
-  if (fileInput) {
-    fileInput.value = "";
-  }
-
 }
 
 function unlockRecipeSource() {
@@ -674,83 +579,63 @@ function unlockRecipeSource() {
     return;
   }
 
-  const csvUrl = getRecipeCsvUrl();
+  const sheetUrl = getRecipeSheetUrl();
 
   if (urlInput) {
-    urlInput.value = csvUrl;
+    urlInput.value = sheetUrl;
   }
 
   if (loginEl) {
     loginEl.style.display = "none";
   }
 
-  setRecipeSourceMessage("");
+  setRecipeSourceMessage(sheetUrl ? "" : "スプレッドシートURLをまだ取得できません。Apps Scriptを更新するか、recipe-api-config.jsにRECIPE_SHEET_URLを設定してください。");
 
   if (linksEl) {
     linksEl.style.display = "block";
   }
 }
 
-function downloadRecipeCsv() {
-  if (!isCocktailDataReady()) {
-    setRecipeSourceMessage("レシピデータをまだ読み込めていません。");
+function openRecipeSpreadsheet() {
+  const sheetUrl = getRecipeSheetUrl();
+
+  if (!sheetUrl) {
+    setRecipeSourceMessage("スプレッドシートURLを取得できません。Apps Scriptを更新するか、recipe-api-config.jsにRECIPE_SHEET_URLを設定してください。");
     return;
   }
 
-  const csvText = convertCocktailsToCsv(cocktailData);
-  const blob = new Blob([csvText], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  window.open(sheetUrl, "_blank", "noopener");
+  setRecipeSourceMessage("スプレッドシートを開きました。編集後は「シートから再読み込み」を押してください。", true);
+}
 
-  link.href = url;
-  link.download = "recipes.csv";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+async function refreshRecipesFromSheet() {
+  if (!isRecipeApiConfigured()) {
+    setRecipeSourceMessage("共有レシピAPIが未設定です。recipe-api-config.jsにURLを設定してください。");
+    return;
+  }
 
-  setRecipeSourceMessage("CSVを保存しました。", true);
+  try {
+    setRecipeSourceMessage("スプレッドシートから読み込み中です...");
+
+    const sharedCsvText = await loadRecipeCsvFromApi();
+    const recipeCount = applyRecipeCsvText(sharedCsvText);
+    const urlInput = document.getElementById("recipe-source-url");
+
+    if (urlInput) {
+      urlInput.value = getRecipeSheetUrl();
+    }
+
+    renderRecipeList();
+    setRecipeSourceMessage(`スプレッドシートのレシピを読み込みました。レシピ ${recipeCount}件`, true);
+  } catch (error) {
+    console.error(error);
+    setRecipeSourceMessage("スプレッドシートから読み込めませんでした。Apps Scriptの公開設定とシート内容を確認してください。");
+  }
 }
 
 function handleRecipeSourcePasswordKey(event) {
   if (event.key === "Enter") {
     unlockRecipeSource();
-  }
-}
-
-async function overwriteRecipesFromCsvFile() {
-  const fileInput = document.getElementById("recipe-source-file");
-
-  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-    setRecipeSourceMessage("編集済みCSVを選択してください。");
-    return;
-  }
-
-  try {
-    const csvText = await fileInput.files[0].text();
-    const recipeCount = applyRecipeCsvText(csvText);
-    const normalizedCsvText = convertCocktailsToCsv(cocktailData);
-    const expectedSignature = getRecipeCsvSignature(normalizedCsvText);
-
-    if (!isRecipeApiConfigured()) {
-      setRecipeSourceMessage("共有レシピAPIが未設定です。recipe-api-config.jsにURLを設定してください。");
-      return;
-    }
-
-    setRecipeSourceMessage("共有レシピへ反映中です...");
-    await submitRecipeCsvToApi(normalizedCsvText);
-
-    const sharedCsvText = await loadRecipeCsvFromApi();
-
-    if (getRecipeCsvSignature(sharedCsvText) !== expectedSignature) {
-      throw new Error("Shared recipe data did not match the uploaded CSV.");
-    }
-
-    applyRecipeCsvText(sharedCsvText);
-    setRecipeSourceMessage(`全端末用レシピを更新しました。レシピ ${recipeCount}件`, true);
-  } catch (error) {
-    console.error(error);
-    setRecipeSourceMessage("CSVを読み込めませんでした。列名と文字コードを確認してください。");
   }
 }
 
