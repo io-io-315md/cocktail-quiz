@@ -122,15 +122,15 @@ function getCourseLabel(courseName) {
 
 function getDifficultyLabel(difficulty) {
   if (difficulty === "beginner") {
-    return "初級";
+    return "初級(絶対に暗記しておきたいレシピ)";
   }
 
   if (difficulty === "intermediate") {
-    return "中級";
+    return "中級(メニュー内のレシピ)";
   }
 
   if (difficulty === "advanced") {
-    return "上級";
+    return "上級(メニュー外のレシピ)";
   }
 
   return difficulty;
