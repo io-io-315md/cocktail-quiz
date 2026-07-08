@@ -513,7 +513,7 @@
     "name": "カシスオレンジ",
     "course": "liqueur",
     "baseName": "カシスリキュール",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "オレンジジュース",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -547,7 +547,7 @@
     "name": "カシスソーダ",
     "course": "liqueur",
     "baseName": "カシスリキュール",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "ソーダ",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -557,8 +557,7 @@
       "baseName": [
         "カシスリキュール",
         "ピーチリキュール",
-        "カンパリ",
-        "カルーア"
+        "カンパリ"
       ],
       "baseAmount": [
         "30ml",
@@ -581,7 +580,7 @@
     "name": "カシスウーロン",
     "course": "liqueur",
     "baseName": "カシスリキュール",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "ウーロン茶",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -591,8 +590,7 @@
       "baseName": [
         "カシスリキュール",
         "ピーチリキュール",
-        "カンパリ",
-        "カルーア"
+        "カンパリ"
       ],
       "baseAmount": [
         "30ml",
@@ -615,7 +613,7 @@
     "name": "ファジーネーブル",
     "course": "liqueur",
     "baseName": "ピーチリキュール",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "オレンジジュース",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -649,7 +647,7 @@
     "name": "ピーチウーロン",
     "course": "liqueur",
     "baseName": "ピーチリキュール",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "ウーロン茶",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -683,7 +681,7 @@
     "name": "カンパリオレンジ",
     "course": "liqueur",
     "baseName": "カンパリ",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "オレンジジュース",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -691,10 +689,7 @@
     "technique": "ビルド",
     "choices": {
       "baseName": [
-        "カンパリ",
-        "カシスリキュール",
-        "ピーチリキュール",
-        "カルーア"
+        "カンパリ"
       ],
       "baseAmount": [
         "30ml",
@@ -717,7 +712,7 @@
     "name": "カンパリソーダ",
     "course": "liqueur",
     "baseName": "カンパリ",
-    "baseAmount": "30ml",
+    "baseAmount": "45ml",
     "mixerName": "ソーダ",
     "mixerAmount": "UP",
     "subName": "なし",
@@ -725,10 +720,7 @@
     "technique": "ビルド",
     "choices": {
       "baseName": [
-        "カンパリ",
-        "カシスリキュール",
-        "ピーチリキュール",
-        "カルーア"
+        "カンパリ"
       ],
       "baseAmount": [
         "30ml",
@@ -772,8 +764,7 @@
       "mixerName": [
         "グレープフルーツジュース",
         "オレンジジュース",
-        "ソーダ",
-        "トニックウォーター"
+        "コアントロー"
       ],
       "mixerAmount": [
         "30ml",
@@ -1565,7 +1556,7 @@
     "choices": {
       "baseName": [
         "ライウイスキー",
-        "ウイスキー",
+        "ラム",
         "ブランデー",
         "カルヴァドス"
       ],
@@ -1749,9 +1740,9 @@
         "ラム"
       ],
       "baseAmount": [
-        "30ml",
-        "40ml",
-        "45ml"
+        "15ml",
+        "60ml",
+        "60ml"
       ],
       "mixerName": [
         "ライムジュース",
@@ -1792,8 +1783,8 @@
         "スパークリングワイン"
       ],
       "baseAmount": [
+        "30ml",
         "45ml",
-        "80ml",
         "90ml"
       ],
       "mixerName": [
@@ -1838,8 +1829,8 @@
         "スパークリングワイン"
       ],
       "baseAmount": [
+        "30ml",
         "45ml",
-        "80ml",
         "90ml"
       ],
       "mixerName": [
@@ -1884,8 +1875,8 @@
         "スパークリングワイン"
       ],
       "baseAmount": [
+        "30ml",
         "45ml",
-        "80ml",
         "90ml"
       ],
       "mixerName": [
