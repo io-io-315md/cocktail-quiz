@@ -11,7 +11,9 @@ let cocktailData = [];
 // --- レシピデータ読み込み ---
 async function loadCocktailData() {
   try {
-    const response = await fetch("recipes.json");
+    const response = await fetch(`recipes.json?cacheBust=${Date.now()}`, {
+      cache: "no-store"
+    });
 
     if (!response.ok) {
       throw new Error(`recipes.json の読み込みに失敗しました: ${response.status}`);
