@@ -2131,7 +2131,7 @@ getCourseLabel = function(courseName) {
   if (courseName === "spirits") return "スピリッツベース";
   if (courseName === "liqueur") return "リキュールベース";
   if (courseName === "whiskyBrandy") return "ウイスキー・ブランデーベース";
-  if (courseName === "wine") return "ワインベース";
+  if (courseName === "wine") return "ワイン/ビールベース";
   return courseName;
 };
 
@@ -2330,6 +2330,22 @@ const intermediateCocktailNames = new Set([
 getCourseLabel = function(courseName) {
   if (courseName === "all") {
     return "全レシピ";
+  }
+
+  if (courseName === "spirits") {
+    return "スピリッツベース";
+  }
+
+  if (courseName === "liqueur") {
+    return "リキュールベース";
+  }
+
+  if (courseName === "whiskyBrandy") {
+    return "ウイスキー・ブランデーベース";
+  }
+
+  if (courseName === "wine") {
+    return "ワイン/ビールベース";
   }
 
   return courseName;
